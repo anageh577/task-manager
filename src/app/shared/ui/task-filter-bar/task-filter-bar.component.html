@@ -1,0 +1,87 @@
+<div class="tabs" role="group" aria-label="Filter by status">
+  @for (tab of statusTabs; track tab.value) {
+    <button
+      type="button"
+      class="tab"
+      [class.active]="filters().status === tab.value"
+      [attr.aria-pressed]="filters().status === tab.value"
+      (click)="setStatus(tab.value)"
+    >
+      {{ tab.label }}
+    </button>
+  }
+</div>
+
+<div class="actions">
+  @if (hasActiveFilters()) {
+    <button mat-button type="button" class="clear" (click)="reset.emit()">Clear filters</button>
+  }
+
+  <button
+    mat-stroked-button
+    type="button"
+    class="menu-button"
+    [class.selected]="filters().assigneeId !== all"
+    [matMenuTriggerFor]="assigneeMenu"
+  >
+    {{ assigneeLabel() }} <span aria-hidden="true">▾</span>
+  </button>
+  <mat-menu #assigneeMenu="matMenu" xPosition="before">
+    <button
+      mat-menu-item
+      type="button"
+      role="menuitemradio"
+      [attr.aria-checked]="filters().assigneeId === all"
+      (click)="setAssignee(all)"
+    >
+      All assignees
+    </button>
+    @for (user of users(); track user.id) {
+      <button
+        mat-menu-item
+        type="button"
+        role="menuitemradio"
+        [attr.aria-checked]="filters().assigneeId === user.id"
+        (click)="setAssignee(user.id)"
+      >
+        {{ user.name }}
+      </button>
+    }
+  </mat-menu>
+
+  <button
+    mat-stroked-button
+    type="button"
+    class="menu-button"
+    [class.selected]="filters().priority !== all"
+    [matMenuTriggerFor]="priorityMenu"
+  >
+    {{ priorityLabel() }} <span aria-hidden="true">▾</span>
+  </button>
+  <mat-menu #priorityMenu="matMenu" xPosition="before">
+    <button
+      mat-menu-item
+      type="button"
+      role="menuitemradio"
+      [attr.aria-checked]="filters().priority === all"
+      (click)="setPriority(all)"
+    >
+      All priorities
+    </button>
+    @for (priority of priorities; track priority.value) {
+      <button
+        mat-menu-item
+        type="button"
+        role="menuitemradio"
+        [attr.aria-checked]="filters().priority === priority.value"
+        (click)="setPriority(priority.value)"
+      >
+        {{ priority.label }}
+      </button>
+    }
+  </mat-menu>
+
+  <button mat-flat-button type="button" class="new-task" (click)="newTask.emit()">
+    + New Task
+  </button>
+</div>

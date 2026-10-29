@@ -127,3 +127,58 @@ body {
   background: var(--tm-bg);
   -webkit-font-smoothing: antialiased;
 }
+
+h1,
+h2,
+h3,
+h4,
+p {
+  margin: 0;
+}
+
+button {
+  font: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--tm-primary);
+  outline-offset: 2px;
+}
+
+// Reusable surface used by cards and panels.
+.tm-panel {
+  background: var(--tm-surface);
+  border: 1px solid var(--tm-border);
+  border-radius: var(--tm-radius);
+  box-shadow: var(--tm-shadow-sm);
+}
+
+.tm-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 24px;
+  max-width: 1600px;
+
+  @media (max-width: 599.98px) {
+    gap: 16px;
+    padding: 16px;
+  }
+}
+
+.tm-page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  h1 {
+    font-size: 22px;
+    font-weight: 700;
+  }
+
+  p {
+    color: var(--tm-text-muted);
+  }
+}
