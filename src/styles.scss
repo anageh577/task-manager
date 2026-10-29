@@ -1,1 +1,129 @@
-/* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
+
+// ---------------------------------------------------------------------------
+// Design tokens
+// ---------------------------------------------------------------------------
+:root {
+  --tm-primary: #1976d2;
+  --tm-primary-hover: #1565c0;
+  --tm-primary-soft: #e3f2fd;
+
+  --tm-success: #2e7d32;
+  --tm-success-soft: #e8f5e9;
+  --tm-warning: #f57c00;
+  --tm-warning-soft: #fff3e0;
+  --tm-danger: #d32f2f;
+  --tm-danger-soft: #ffebee;
+
+  --tm-bg: #f5f7fa;
+  --tm-surface: #ffffff;
+  --tm-surface-muted: #f3f4f6;
+  --tm-border: #e5e7eb;
+  --tm-text: #1f2937;
+  --tm-text-muted: #6b7280;
+  --tm-text-subtle: #4b5563;
+
+  --tm-radius-sm: 4px;
+  --tm-radius: 8px;
+  --tm-radius-lg: 12px;
+  --tm-shadow-sm: 0 1px 2px rgb(16 24 40 / 6%);
+  --tm-shadow: 0 1px 3px rgb(16 24 40 / 10%), 0 1px 2px rgb(16 24 40 / 6%);
+  --tm-shadow-lg: 0 8px 24px rgb(16 24 40 / 12%);
+
+  --tm-header-height: 64px;
+  --tm-sidebar-width: 220px;
+  --tm-transition: 160ms cubic-bezier(0.2, 0, 0, 1);
+
+  color-scheme: light;
+}
+
+html {
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$azure-palette,
+        tertiary: mat.$blue-palette,
+        theme-type: light,
+      ),
+      typography: (
+        plain-family: 'Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif',
+        brand-family: 'Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif',
+      ),
+      density: 0,
+    )
+  );
+
+  // Align Material components with the flat, blue design language of the mockups.
+  @include mat.button-overrides(
+    (
+      filled-container-color: var(--tm-primary),
+      filled-label-text-color: #fff,
+      filled-container-shape: var(--tm-radius-sm),
+      outlined-container-shape: var(--tm-radius-sm),
+      text-container-shape: var(--tm-radius-sm),
+      protected-container-shape: var(--tm-radius-sm),
+    )
+  );
+  @include mat.dialog-overrides(
+    (
+      container-shape: var(--tm-radius-lg),
+      container-color: var(--tm-surface),
+    )
+  );
+  @include mat.sidenav-overrides(
+    (
+      container-shape: 0,
+      container-background-color: var(--tm-surface),
+      content-background-color: var(--tm-bg),
+    )
+  );
+  @include mat.menu-overrides(
+    (
+      container-color: var(--tm-surface),
+    )
+  );
+  @include mat.select-overrides(
+    (
+      panel-background-color: var(--tm-surface),
+    )
+  );
+  @include mat.datepicker-overrides(
+    (
+      calendar-container-background-color: var(--tm-surface),
+    )
+  );
+  @include mat.form-field-overrides(
+    (
+      outlined-container-shape: var(--tm-radius-sm),
+      outlined-focus-outline-color: var(--tm-primary),
+      outlined-focus-label-text-color: var(--tm-primary),
+    )
+  );
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--tm-text);
+  background: var(--tm-bg);
+  -webkit-font-smoothing: antialiased;
+}
