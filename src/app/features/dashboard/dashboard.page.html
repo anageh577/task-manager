@@ -1,0 +1,13 @@
+<div class="tm-page">
+  <h1 class="visually-hidden">Dashboard</h1>
+
+  <section class="stats" aria-label="Task statistics">
+    @for (stat of statistics; track stat.id) {
+      <app-stat-card [stat]="stat" />
+    }
+  </section>
+
+  <app-task-filter-bar [filters]="filters" [users]="users" />
+
+  <app-task-board [columns]="columns" />
+</div>
