@@ -1,0 +1,50 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding: 16px 12px;
+}
+
+ul {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--tm-text-subtle);
+  text-decoration: none;
+  border-radius: var(--tm-radius-sm);
+  transition:
+    background-color var(--tm-transition),
+    color var(--tm-transition);
+
+  &:hover {
+    background: var(--tm-surface-muted);
+    color: var(--tm-text);
+  }
+
+  &.active {
+    background: var(--tm-primary);
+    color: #fff;
+  }
+}
+
+.icon {
+  width: 18px;
+  font-size: 13px;
+  text-align: center;
+}
+
+.new-task {
+  width: 100%;
+}
