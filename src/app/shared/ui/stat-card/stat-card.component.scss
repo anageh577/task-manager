@@ -1,0 +1,49 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 132px;
+  padding: 20px;
+  transition:
+    box-shadow var(--tm-transition),
+    transform var(--tm-transition);
+
+  &:hover {
+    box-shadow: var(--tm-shadow);
+    transform: translateY(-1px);
+  }
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--tm-text-subtle);
+}
+
+.icon {
+  font-size: 14px;
+}
+
+.value {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.change {
+  font-size: 12px;
+
+  &.positive {
+    color: var(--tm-success);
+  }
+
+  &.negative {
+    color: var(--tm-danger);
+  }
+
+  &.neutral {
+    color: var(--tm-text-muted);
+  }
+}
