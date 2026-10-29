@@ -1,0 +1,40 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.container {
+  flex: 1;
+}
+
+.sidenav {
+  width: var(--tm-sidebar-width);
+  border-right: 1px solid var(--tm-border);
+}
+
+main {
+  min-height: calc(100vh - var(--tm-header-height));
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.skip-link {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 100;
+  padding: 8px 12px;
+  color: #fff;
+  background: var(--tm-primary);
+  border: 0;
+  border-radius: var(--tm-radius-sm);
+  transform: translateY(-200%);
+  transition: transform var(--tm-transition);
+
+  &:focus {
+    transform: none;
+  }
+}
