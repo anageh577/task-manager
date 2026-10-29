@@ -1,0 +1,51 @@
+<div class="board" cdkDropListGroup [class.single]="visibleColumns().length === 1">
+  @for (column of visibleColumns(); track column.status) {
+    <section class="column tm-panel" [attr.aria-labelledby]="'column-' + column.status">
+      <header class="column-header">
+        <h2 [id]="'column-' + column.status">{{ column.label }}</h2>
+        <span class="count" [attr.aria-label]="column.tasks.length + ' tasks'">
+          {{ loading() ? '–' : column.tasks.length }}
+        </span>
+      </header>
+
+      @if (loading()) {
+        <div class="list" aria-busy="true" aria-label="Loading tasks">
+          @for (i of skeletonCards; track i) {
+            <div class="skeleton-card">
+              <app-skeleton width="44px" height="16px" />
+              <app-skeleton width="80%" height="14px" />
+              <app-skeleton width="95%" height="10px" />
+              <app-skeleton width="40%" height="10px" />
+              <app-skeleton width="30%" height="22px" radius="12px" />
+            </div>
+          }
+        </div>
+      } @else {
+        <div
+          class="list"
+          role="list"
+          cdkDropList
+          [id]="'drop-' + column.status"
+          [cdkDropListData]="column.status"
+          (cdkDropListDropped)="drop($event)"
+        >
+          @for (task of column.tasks; track task.id) {
+            <app-task-card
+              role="listitem"
+              cdkDrag
+              [cdkDragData]="task"
+              [task]="task"
+              [today]="today()"
+              animate.enter="tm-enter"
+              (edit)="edit.emit($event)"
+              (delete)="delete.emit($event)"
+              (statusChange)="statusChange.emit($event)"
+            >
+              <div *cdkDragPlaceholder class="drop-placeholder"></div>
+            </app-task-card>
+          }
+        </div>
+      }
+    </section>
+  }
+</div>
