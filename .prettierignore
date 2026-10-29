@@ -1,0 +1,7 @@
+dist
+coverage
+.angular
+node_modules
+mock-server/db.json
+data-fetching
+package-lock.json

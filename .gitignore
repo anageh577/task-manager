@@ -8,6 +8,7 @@
 
 # Node
 /node_modules
+.husky/_
 npm-debug.log
 yarn-error.log
 
