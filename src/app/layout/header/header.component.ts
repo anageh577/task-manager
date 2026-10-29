@@ -3,7 +3,7 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { RouterLink } from '@angular/router';
-import { AvatarComponent } from '../../shared/ui/avatar/avatar.component';
+import { AvatarComponent } from '@shared/ui/avatar/avatar.component';
 
 @Component({
   selector: 'app-header',
