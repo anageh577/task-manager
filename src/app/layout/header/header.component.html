@@ -1,0 +1,61 @@
+<div class="start">
+  @if (showMenuButton()) {
+    <button
+      mat-icon-button
+      type="button"
+      class="menu"
+      aria-label="Toggle navigation"
+      (click)="menuToggle.emit()"
+    ></button>
+  }
+  <a routerLink="/dashboard" class="brand" aria-label="Task Manager home">
+    <span class="logo">
+      <img src="assets/header-logo.svg" alt="Task Manager" />
+    </span>
+    <span class="brand-name">Task Manager</span>
+  </a>
+</div>
+
+<div class="search" role="search">
+  <span class="search-icon" aria-hidden="true">🔍</span>
+  <input
+    id="global-search"
+    type="search"
+    placeholder="Search tasks..."
+    autocomplete="off"
+    [value]="search()"
+    (input)="onSearch($event)"
+  />
+</div>
+
+<div class="end">
+  <button
+    mat-icon-button
+    type="button"
+    class="bell"
+    [matBadge]="overdueCount() || null"
+    matBadgeColor="warn"
+    matBadgeSize="small"
+    [title]="overdueCount() + ' overdue tasks'"
+    [attr.aria-label]="'Notifications: ' + overdueCount() + ' overdue tasks'"
+    (click)="showOverdue.emit()"
+  >
+    <span aria-hidden="true">🔔</span>
+  </button>
+
+  <button
+    type="button"
+    class="profile"
+    [matMenuTriggerFor]="profileMenu"
+    [attr.aria-label]="user().avatar + ', account menu for ' + user().name"
+  >
+    <app-avatar [name]="user().name" [initials]="user().avatar" [size]="32" />
+  </button>
+  <mat-menu #profileMenu="matMenu" xPosition="before">
+    <div class="profile-card" role="presentation">
+      <strong>{{ user().name }}</strong>
+      <span>{{ user().email }}</span>
+    </div>
+    <a mat-menu-item routerLink="/settings">Settings</a>
+  </mat-menu>
+</div>
