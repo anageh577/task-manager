@@ -47,3 +47,4 @@ Thumbs.db
 # Data files
 data-generator/statistics.json
 data-generator/tasks.json
+mock-server/db.json
