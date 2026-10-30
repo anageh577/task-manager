@@ -2,16 +2,39 @@
   <h1 class="visually-hidden">Dashboard</h1>
 
   <section class="stats" aria-label="Task statistics">
-    @for (stat of statistics; track stat.id) {
-      <app-stat-card [stat]="stat" />
+    @for (stat of statistics.cards(); track stat.id) {
+      <app-stat-card [stat]="stat" [loading]="statistics.isLoading()" />
     }
   </section>
 
-  <app-task-filter-bar [filters]="filters" [users]="users" />
-  <app-task-board
-    [columns]="tasksStore.columns()"
-    [statusFilter]="statusFilter()"
-    [loading]="tasksStore.isInitialLoad()"
-    [today]="today()"
+  <app-task-filter-bar
+    [filters]="tasks.filters()"
+    [users]="users.users()"
+    [hasActiveFilters]="tasks.hasActiveFilters()"
+    (filtersChange)="updateFilters($event)"
+    (reset)="tasks.resetFilters()"
+    (newTask)="actions.openCreate()"
   />
+
+  @if (loadError(); as error) {
+    <app-error-state
+      title="Tasks could not be loaded"
+      [message]="error"
+      [retrying]="tasks.isLoading()"
+      (retry)="tasks.reload()"
+    />
+  } @else {
+    <p class="visually-hidden" aria-live="polite">{{ resultsAnnouncement() }}</p>
+    <app-task-board
+      [columns]="tasks.columns()"
+      [statusFilter]="statusFilter()"
+      [loading]="tasks.isInitialLoad()"
+      [today]="today"
+      (moved)="onMove($event)"
+      (edit)="actions.openEdit($event)"
+      (delete)="actions.confirmDelete($event)"
+      (statusChange)="onStatusChange($event)"
+      (addTask)="actions.openCreate($event)"
+    />
+  }
 </div>

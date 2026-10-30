@@ -1,90 +1,22 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import type { Assignee, Statistic, TaskStatus } from '@core/models';
-import { ALL, DEFAULT_TASK_FILTERS } from '@core/models';
-import { TaskStore } from '@core/state';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { NOW } from '@core/config/app-config';
+import type { TaskFilters, TaskStatus } from '@core/models';
+import { ALL } from '@core/models';
+import { StatisticsStore } from '@core/state/statistics.store';
+import { TaskStore } from '@core/state/task.store';
+import { UserStore } from '@core/state/user.store';
+import { TaskActionsService } from '@shared/task-dialogs/task-actions.service';
+import { ErrorStateComponent } from '@shared/ui/error-state/error-state.component';
 import { StatCardComponent } from '@shared/ui/stat-card/stat-card.component';
+import type { TaskStatusChange } from '@shared/ui/task-card/task-card.component';
 import { TaskFilterBarComponent } from '@shared/ui/task-filter-bar/task-filter-bar.component';
+import type { TaskMove } from './task-board/task-board.component';
 import { TaskBoardComponent } from './task-board/task-board.component';
-/**
- * @TODO: Replace with actual data from the API
- */
-const JOHN: Assignee = {
-  id: 'user-001',
-  name: 'John Doe',
-  avatar: 'JD',
-  email: 'john.doe@company.com',
-};
-
-const SARAH: Assignee = {
-  id: 'user-002',
-  name: 'Sarah Smith',
-  avatar: 'SS',
-  email: 'sarah.smith@company.com',
-};
-
-const MIKE: Assignee = {
-  id: 'user-003',
-  name: 'Mike Johnson',
-  avatar: 'MJ',
-  email: 'mike.johnson@company.com',
-};
-
-const EMILY: Assignee = {
-  id: 'user-004',
-  name: 'Emily Davis',
-  avatar: 'ED',
-  email: 'emily.davis@company.com',
-};
-
-const USERS: Assignee[] = [JOHN, SARAH, MIKE, EMILY];
-
-const STATS: Statistic[] = [
-  {
-    id: 'stat-001',
-    title: 'Total Tasks',
-    icon: '📊',
-    value: 0,
-    change: '+2',
-    changeLabel: 'this week',
-    changeType: 'positive',
-    color: '#1976D2',
-  },
-  {
-    id: 'stat-002',
-    title: 'Completed',
-    icon: '✅',
-    value: 0,
-    change: '+1',
-    changeLabel: 'today',
-    changeType: 'positive',
-    color: '#388E3C',
-  },
-  {
-    id: 'stat-003',
-    title: 'In Progress',
-    icon: '🔄',
-    value: 0,
-    change: '0',
-    changeLabel: 'Same as yesterday',
-    changeType: 'neutral',
-    color: '#FF6F00',
-  },
-  {
-    id: 'stat-004',
-    title: 'Overdue',
-    icon: '⚠️',
-    value: 1,
-    change: '+1',
-    changeLabel: 'today',
-    changeType: 'negative',
-    color: '#D32F2F',
-  },
-];
 
 /** Dashboard container: statistics, filters and the Kanban board. */
 @Component({
   selector: 'app-dashboard-page',
-  imports: [StatCardComponent, TaskBoardComponent, TaskFilterBarComponent],
+  imports: [ErrorStateComponent, StatCardComponent, TaskBoardComponent, TaskFilterBarComponent],
   templateUrl: './dashboard.page.html',
   styles: `
     .stats {
@@ -103,22 +35,36 @@ const STATS: Statistic[] = [
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class DashboardPage {
-  /**
-   * @TODO: Replace with actual data from the API
-   */
-  protected readonly statistics = STATS;
-  protected readonly users = USERS;
-  protected readonly filters = DEFAULT_TASK_FILTERS;
-  protected readonly tasksStore = inject(TaskStore);
-
-  protected readonly today = signal(new Date());
+  protected readonly tasks = inject(TaskStore);
+  protected readonly statistics = inject(StatisticsStore);
+  protected readonly users = inject(UserStore);
+  protected readonly actions = inject(TaskActionsService);
+  protected readonly today = inject(NOW);
 
   protected readonly statusFilter = computed<TaskStatus | null>(() => {
-    const status = this.tasksStore.filters().status;
+    const status = this.tasks.filters().status;
     return status === ALL ? null : status;
   });
   /** Only block the board when there is nothing to show; stale data beats an error screen. */
   protected readonly loadError = computed(() =>
-    this.tasksStore.tasks().length ? null : this.tasksStore.error(),
+    this.tasks.tasks().length ? null : this.tasks.error(),
   );
+  protected readonly resultsAnnouncement = computed(() =>
+    this.tasks.hasActiveFilters()
+      ? `${this.tasks.filteredTasks().length} tasks match the filters`
+      : '',
+  );
+
+  protected updateFilters(changes: Partial<TaskFilters>): void {
+    this.tasks.updateFilters(changes);
+  }
+
+  protected onMove({ task, status, index }: TaskMove): void {
+    void this.actions.move(task, status, index);
+  }
+
+  protected onStatusChange({ task, status }: TaskStatusChange): void {
+    console.log('onStatusChange', task, status);
+    void this.actions.changeStatus(task, status);
+  }
 }

@@ -43,6 +43,17 @@
             >
               <div *cdkDragPlaceholder class="drop-placeholder"></div>
             </app-task-card>
+          } @empty {
+            <app-empty-state
+              class="empty"
+              icon="📭"
+              title="No tasks here"
+              message="Drag a task here or create a new one."
+            >
+              <button mat-button type="button" (click)="addTask.emit(column.status)">
+                + Add task
+              </button>
+            </app-empty-state>
           }
         </div>
       }

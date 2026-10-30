@@ -4,6 +4,7 @@ import { ChangeDetectionStrategy, Component, computed, input, output } from '@an
 import { MatButtonModule } from '@angular/material/button';
 import type { Task, TaskStatus } from '@core/models';
 import { STATUS_LABELS, TASK_STATUSES } from '@core/models';
+import { EmptyStateComponent } from '@shared/ui/empty-state/empty-state.component';
 import { SkeletonComponent } from '@shared/ui/skeleton/skeleton.component';
 import type { TaskStatusChange } from '@shared/ui/task-card/task-card.component';
 import { TaskCardComponent } from '@shared/ui/task-card/task-card.component';
@@ -26,6 +27,7 @@ export interface TaskMove {
     CdkDropList,
     CdkDropListGroup,
     MatButtonModule,
+    EmptyStateComponent,
     SkeletonComponent,
     TaskCardComponent,
   ],
