@@ -1,5 +1,5 @@
-import type { Task, TaskFilters, TaskStatus } from '../models';
-import { ALL } from '../models';
+import type { Assignee, Task, TaskFilters, TaskPriority, TaskStatus } from '../models';
+import { ALL, TASK_PRIORITIES, TASK_STATUSES } from '../models';
 
 /** Spacing between `order` values when tasks are appended to a column. */
 export const ORDER_STEP = 1000;
@@ -36,4 +36,48 @@ export function groupByStatus(tasks: readonly Task[]): Record<TaskStatus, Task[]
     groups[task.status].push(task);
   }
   return groups;
+}
+
+export function countByStatus(tasks: readonly Task[]): Record<TaskStatus, number> {
+  return Object.fromEntries(
+    TASK_STATUSES.map((status) => [status, tasks.filter((t) => t.status === status).length]),
+  ) as Record<TaskStatus, number>;
+}
+
+export function countByPriority(tasks: readonly Task[]): Record<TaskPriority, number> {
+  return Object.fromEntries(
+    TASK_PRIORITIES.map((priority) => [
+      priority,
+      tasks.filter((t) => t.priority === priority).length,
+    ]),
+  ) as Record<TaskPriority, number>;
+}
+
+/**
+ * Computes a fractional `order` for a task dropped between two neighbours, so a
+ * reorder only needs to persist the moved task instead of renumbering the column.
+ */
+export function orderBetween(previous?: Task, next?: Task): number {
+  if (previous && next) return (previous.order + next.order) / 2;
+  if (previous) return previous.order + ORDER_STEP;
+  if (next) return next.order - ORDER_STEP;
+  return ORDER_STEP;
+}
+
+/** Order value that appends a task at the end of the given column. */
+export function nextOrderFor(tasks: readonly Task[], status: TaskStatus): number {
+  const orders = tasks.filter((t) => t.status === status).map((t) => t.order);
+  return (orders.length ? Math.max(...orders) : 0) + ORDER_STEP;
+}
+
+export function uniqueAssignees(tasks: readonly Task[]): Assignee[] {
+  return [...new Map(tasks.map((task) => [task.assignee.id, task.assignee])).values()];
+}
+
+export function firstName(fullName: string): string {
+  return fullName.trim().split(/\s+/)[0] ?? fullName;
+}
+
+export function generateId(prefix: string): string {
+  return `${prefix}-${crypto.randomUUID().slice(0, 8)}`;
 }

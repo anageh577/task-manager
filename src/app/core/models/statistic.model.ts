@@ -10,3 +10,8 @@ export interface Statistic {
   changeType: ChangeType;
   color: string;
 }
+
+export interface StatisticsResponse {
+  statistics: Statistic[];
+  lastUpdated: string;
+}
