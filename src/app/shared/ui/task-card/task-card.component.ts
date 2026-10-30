@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
-import type { Task, TaskStatus } from '../../../core/models';
-import { STATUS_LABELS, TASK_STATUSES } from '../../../core/models';
+import type { Task, TaskStatus } from '@core/models';
+import { STATUS_LABELS, TASK_STATUSES } from '@core/models';
 
 import { AvatarComponent } from '../avatar/avatar.component';
 import { PriorityBadgeComponent } from '../priority-badge/priority-badge.component';

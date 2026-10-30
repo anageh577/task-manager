@@ -2,13 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, input, output } from '@an
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import type { All, Assignee, TaskFilters, TaskPriority, TaskStatus } from '@core/models';
-import {
-  ALL,
-  PRIORITY_LABELS,
-  STATUS_LABELS,
-  TASK_PRIORITIES,
-  TASK_STATUSES,
-} from '../../../core/models';
+import { ALL, PRIORITY_LABELS, STATUS_LABELS, TASK_PRIORITIES, TASK_STATUSES } from '@core/models';
 
 /** Status tabs + priority/assignee menus + "New Task" action. Purely presentational. */
 @Component({
