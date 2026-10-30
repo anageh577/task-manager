@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import type { Assignee, Statistic, Task, TaskStatus } from '@core/models';
-import { DEFAULT_TASK_FILTERS } from '@core/models';
-import { TaskBoardComponent } from './task-board/task-board.component';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import type { Assignee, Statistic, TaskStatus } from '@core/models';
+import { ALL, DEFAULT_TASK_FILTERS } from '@core/models';
+import { TaskStore } from '@core/state';
 import { StatCardComponent } from '@shared/ui/stat-card/stat-card.component';
 import { TaskFilterBarComponent } from '@shared/ui/task-filter-bar/task-filter-bar.component';
+import { TaskBoardComponent } from './task-board/task-board.component';
 /**
  * @TODO: Replace with actual data from the API
  */
@@ -37,102 +38,12 @@ const EMILY: Assignee = {
 
 const USERS: Assignee[] = [JOHN, SARAH, MIKE, EMILY];
 
-const TASKS: Task[] = [
-  {
-    id: 'task-001',
-    title: 'Design new homepage layout',
-    description:
-      'Create wireframes and mockups for the new homepage redesign with modern UI elements',
-    status: 'todo',
-    priority: 'high',
-    dueDate: '2026-10-31',
-    assignee: JOHN,
-    tags: ['Design'],
-    order: 0,
-    createdAt: '2026-10-27T20:02:24.393Z',
-    updatedAt: '2026-10-29T21:02:24.393Z',
-  },
-  {
-    id: 'task-015',
-    title: 'Prepare Q4 budget report',
-    description: 'Compile and analyze financial data for quarterly budget presentation',
-    status: 'todo',
-    priority: 'high',
-    dueDate: '2026-10-27',
-    assignee: SARAH,
-    tags: ['Finance'],
-    order: 1,
-    createdAt: '2026-10-13T20:02:24.393Z',
-    updatedAt: '2026-10-29T21:02:24.393Z',
-  },
-  {
-    id: 'task-005',
-    title: 'Implement user authentication',
-    description: 'Add JWT-based authentication system with refresh tokens',
-    status: 'in_progress',
-    priority: 'high',
-    dueDate: '2026-11-01',
-    assignee: JOHN,
-    tags: ['Backend'],
-    order: 0,
-    createdAt: '2026-10-22T20:02:24.393Z',
-    updatedAt: '2026-10-29T21:02:24.393Z',
-  },
-  {
-    id: 'task-008',
-    title: 'Add dark mode support',
-    description: 'Implement theme toggle with dark/light mode preferences',
-    status: 'in_progress',
-    priority: 'medium',
-    dueDate: '2026-11-04',
-    assignee: EMILY,
-    tags: ['Frontend'],
-    order: 1,
-    createdAt: '2026-10-20T20:02:24.393Z',
-    updatedAt: '2026-10-28T20:02:24.393Z',
-  },
-  {
-    id: 'task-009',
-    title: 'Fix critical login bug',
-    description: 'Resolved issue preventing users from logging in on mobile devices',
-    status: 'done',
-    priority: 'high',
-    dueDate: '2026-10-28',
-    completedAt: '2026-10-29T21:02:24.393Z',
-    assignee: MIKE,
-    tags: ['Bug Fix'],
-    order: 0,
-    createdAt: '2026-10-27T20:02:24.393Z',
-    updatedAt: '2026-10-29T21:02:24.393Z',
-  },
-  {
-    id: 'task-010',
-    title: 'Setup CI/CD pipeline',
-    description: 'Configured GitHub Actions for automated testing and deployment',
-    status: 'done',
-    priority: 'medium',
-    dueDate: '2026-10-27',
-    completedAt: '2026-10-28T20:02:24.393Z',
-    assignee: JOHN,
-    tags: ['DevOps'],
-    order: 1,
-    createdAt: '2026-10-20T20:02:24.393Z',
-    updatedAt: '2026-10-28T20:02:24.393Z',
-  },
-];
-
-const COLUMNS: Record<TaskStatus, Task[]> = {
-  todo: TASKS.filter((task) => task.status === 'todo'),
-  in_progress: TASKS.filter((task) => task.status === 'in_progress'),
-  done: TASKS.filter((task) => task.status === 'done'),
-};
-
 const STATS: Statistic[] = [
   {
     id: 'stat-001',
     title: 'Total Tasks',
     icon: '📊',
-    value: TASKS.length,
+    value: 0,
     change: '+2',
     changeLabel: 'this week',
     changeType: 'positive',
@@ -142,7 +53,7 @@ const STATS: Statistic[] = [
     id: 'stat-002',
     title: 'Completed',
     icon: '✅',
-    value: COLUMNS.done.length,
+    value: 0,
     change: '+1',
     changeLabel: 'today',
     changeType: 'positive',
@@ -152,7 +63,7 @@ const STATS: Statistic[] = [
     id: 'stat-003',
     title: 'In Progress',
     icon: '🔄',
-    value: COLUMNS.in_progress.length,
+    value: 0,
     change: '0',
     changeLabel: 'Same as yesterday',
     changeType: 'neutral',
@@ -197,6 +108,17 @@ export default class DashboardPage {
    */
   protected readonly statistics = STATS;
   protected readonly users = USERS;
-  protected readonly columns = COLUMNS;
   protected readonly filters = DEFAULT_TASK_FILTERS;
+  protected readonly tasksStore = inject(TaskStore);
+
+  protected readonly today = signal(new Date());
+
+  protected readonly statusFilter = computed<TaskStatus | null>(() => {
+    const status = this.tasksStore.filters().status;
+    return status === ALL ? null : status;
+  });
+  /** Only block the board when there is nothing to show; stale data beats an error screen. */
+  protected readonly loadError = computed(() =>
+    this.tasksStore.tasks().length ? null : this.tasksStore.error(),
+  );
 }

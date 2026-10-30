@@ -8,6 +8,10 @@
   </section>
 
   <app-task-filter-bar [filters]="filters" [users]="users" />
-
-  <app-task-board [columns]="columns" />
+  <app-task-board
+    [columns]="tasksStore.columns()"
+    [statusFilter]="statusFilter()"
+    [loading]="tasksStore.isInitialLoad()"
+    [today]="today()"
+  />
 </div>
