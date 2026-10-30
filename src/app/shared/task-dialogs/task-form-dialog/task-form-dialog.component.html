@@ -1,0 +1,115 @@
+<h2 mat-dialog-title id="task-form-title">{{ isEdit ? 'Edit task' : 'New task' }}</h2>
+
+<form [formGroup]="form" (ngSubmit)="submit()" novalidate aria-labelledby="task-form-title">
+  <mat-dialog-content class="content">
+    @if (submitError(); as error) {
+      <p class="submit-error" role="alert">{{ error }}</p>
+    }
+
+    <mat-form-field class="full">
+      <mat-label>Title</mat-label>
+      <input matInput formControlName="title" maxlength="100" autocomplete="off" required />
+      <mat-hint align="end">{{ form.controls.title.value.length }}/100</mat-hint>
+      <mat-error>{{ form.controls.title.errors | validationMessage: 'Title' }}</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="full">
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description" rows="3" maxlength="500"></textarea>
+      <mat-hint align="end">{{ form.controls.description.value.length }}/500</mat-hint>
+      <mat-error>{{
+        form.controls.description.errors | validationMessage: 'Description'
+      }}</mat-error>
+    </mat-form-field>
+
+    <div class="row">
+      <mat-form-field>
+        <mat-label>Status</mat-label>
+        <mat-select formControlName="status" required>
+          @for (option of statusOptions; track option.value) {
+            <mat-option [value]="option.value">{{ option.label }}</mat-option>
+          }
+        </mat-select>
+        <mat-error>{{ form.controls.status.errors | validationMessage: 'Status' }}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Priority</mat-label>
+        <mat-select formControlName="priority" required>
+          @for (option of priorityOptions; track option.value) {
+            <mat-option [value]="option.value">{{ option.label }}</mat-option>
+          }
+        </mat-select>
+        <mat-error>{{ form.controls.priority.errors | validationMessage: 'Priority' }}</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="row">
+      <mat-form-field>
+        <mat-label>Due date</mat-label>
+        <input
+          matInput
+          [matDatepicker]="picker"
+          formControlName="dueDate"
+          [errorStateMatcher]="dueDateMatcher"
+          required
+        />
+        <mat-datepicker-toggle matIconSuffix [for]="picker" />
+        <mat-datepicker #picker />
+        <mat-error>
+          {{
+            (form.controls.dueDate.errors | validationMessage: 'Due date') ||
+              (form.errors | validationMessage: 'Due date')
+          }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Assignee</mat-label>
+        <mat-select formControlName="assigneeId" required>
+          @for (user of users(); track user.id) {
+            <mat-option [value]="user.id">{{ user.name }}</mat-option>
+          }
+        </mat-select>
+        <mat-error>{{ form.controls.assigneeId.errors | validationMessage: 'Assignee' }}</mat-error>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field class="full">
+      <mat-label>Tags</mat-label>
+      <mat-chip-grid #chipGrid aria-label="Tags">
+        @for (tag of tags.controls; track tag; let i = $index) {
+          <mat-chip-row (removed)="removeTag(i)" [class.invalid]="tag.invalid">
+            {{ tag.value }}
+            <button matChipRemove type="button" [attr.aria-label]="'Remove tag ' + tag.value">
+              ×
+            </button>
+          </mat-chip-row>
+        }
+        <input
+          placeholder="Add tag and press Enter"
+          [matChipInputFor]="chipGrid"
+          [matChipInputSeparatorKeyCodes]="separatorKeys"
+          [disabled]="saving()"
+          (matChipInputTokenEnd)="addTag($event)"
+        />
+      </mat-chip-grid>
+      <mat-hint>{{ tags.length }}/{{ maxTags }} tags</mat-hint>
+    </mat-form-field>
+    @if (tags.touched && (tags.errors || tags.invalid)) {
+      <p class="field-error" role="alert">
+        {{ (tags.errors | validationMessage: 'Tags') || 'Tags must be 1–20 characters long.' }}
+      </p>
+    }
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" (click)="requestClose()" [disabled]="saving()">Cancel</button>
+    <button mat-flat-button type="submit" [disabled]="saving() || (isEdit && form.pristine)">
+      @if (saving()) {
+        <mat-spinner diameter="18" aria-label="Saving" />
+      }
+      {{ isEdit ? 'Save changes' : 'Create task' }}
+    </button>
+  </mat-dialog-actions>
+</form>

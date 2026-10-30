@@ -1,0 +1,53 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 8px !important;
+}
+
+.full {
+  width: 100%;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+
+  @media (max-width: 599.98px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.submit-error,
+.field-error {
+  font-size: 13px;
+  color: var(--tm-danger);
+}
+
+.submit-error {
+  padding: 10px 12px;
+  background: var(--tm-danger-soft);
+  border-radius: var(--tm-radius-sm);
+}
+
+.field-error {
+  margin-top: -8px;
+}
+
+mat-chip-row.invalid {
+  --mat-chip-outline-color: var(--tm-danger);
+}
+
+button[matChipRemove] {
+  border: 0;
+  background: none;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+mat-spinner {
+  display: inline-block;
+  margin-right: 8px;
+  vertical-align: middle;
+}
