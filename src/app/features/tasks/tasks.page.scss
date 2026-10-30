@@ -1,0 +1,78 @@
+.table-wrapper {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  --mat-table-background-color: transparent;
+}
+
+.mat-mdc-row {
+  transition: background-color var(--tm-transition);
+
+  &:hover {
+    background: #f9fafb;
+  }
+
+  &.done .task-title {
+    color: var(--tm-text-muted);
+    text-decoration: line-through;
+  }
+}
+
+.task-title {
+  display: block;
+  font-weight: 600;
+}
+
+.task-description {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 12px;
+  color: var(--tm-text-muted);
+}
+
+.status-select {
+  width: 120px;
+  font-size: 13px;
+}
+
+.due {
+  display: block;
+  white-space: nowrap;
+}
+
+.due-label {
+  font-size: 11px;
+  color: var(--tm-text-muted);
+
+  &.overdue {
+    color: #b42318;
+  }
+
+  &.completed {
+    color: var(--tm-success);
+  }
+}
+
+.assignee {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.actions-cell {
+  width: 56px;
+  text-align: right;
+}
+
+.skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+}

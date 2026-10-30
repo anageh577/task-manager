@@ -10,6 +10,7 @@ export interface NavItem {
 
 export const NAV_ITEMS: readonly NavItem[] = [
   { path: '/dashboard', label: 'Dashboard', icon: '🏠' },
+  { path: '/tasks', label: 'Tasks', icon: '✅' },
 ];
 
 @Component({

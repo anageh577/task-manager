@@ -1,6 +1,7 @@
 import type { Routes } from '@angular/router';
 import { ShellComponent } from './layout/shell/shell.component';
 import DashboardPage from './features/dashboard/dashboard.page';
+import TasksPage from './features/tasks/tasks.page';
 
 export const routes: Routes = [
   {
@@ -10,6 +11,10 @@ export const routes: Routes = [
       {
         path: 'dashboard',
         component: DashboardPage,
+      },
+      {
+        path: 'tasks',
+        component: TasksPage,
       },
     ],
   },
