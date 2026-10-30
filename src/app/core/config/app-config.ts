@@ -22,3 +22,8 @@ export const CURRENT_USER = new InjectionToken<Assignee>('CURRENT_USER', {
     email: 'john.doe@company.com',
   }),
 });
+
+export const NOW = new InjectionToken<Date>('NOW', {
+  providedIn: 'root',
+  factory: () => new Date(),
+});
