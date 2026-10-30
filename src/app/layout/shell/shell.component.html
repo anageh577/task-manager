@@ -1,7 +1,11 @@
 <button type="button" class="skip-link" (click)="main.focus()">Skip to main content</button>
 
 <app-header
+  [search]="store.filters().search"
+  [overdueCount]="store.overdueCount()"
+  [user]="user"
   [showMenuButton]="isHandset()"
+  (searchChange)="onSearch($event)"
   (menuToggle)="toggleNav()"
   (showOverdue)="showOverdue()"
 />
@@ -15,7 +19,7 @@
     [fixedTopGap]="64"
     (closedStart)="navOpen.set(false)"
   >
-    <app-sidebar (navigate)="closeNavOnHandset()" />
+    <app-sidebar (newTask)="newTask()" (navigate)="closeNavOnHandset()" />
   </mat-sidenav>
 
   <mat-sidenav-content>
