@@ -31,15 +31,15 @@ import { PRIORITY_LABELS } from '@core/models';
     }
     :host(.high) {
       background: #fdecea;
-      color: #c23f38;
+      color: #9b2c2c;
     }
     :host(.medium) {
       background: #fff1e0;
-      color: #e67700;
+      color: #8a4b00;
     }
     :host(.low) {
       background: #fdf4e2;
-      color: #508c46;
+      color: #1b5e20;
     }
   `,
   host: { '[class]': 'priority()' },
