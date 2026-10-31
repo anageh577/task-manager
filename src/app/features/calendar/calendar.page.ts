@@ -1,15 +1,15 @@
 import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { NOW } from '../../core/config/app-config';
-import type { Task } from '../../core/models';
-import { TaskStore } from '../../core/state/task.store';
-import { isOverdue, parseIsoDate } from '../../core/utils/date.utils';
-import { TaskActionsService } from '../../shared/task-dialogs/task-actions.service';
-import { EmptyStateComponent } from '../../shared/ui/empty-state/empty-state.component';
-import { SkeletonComponent } from '../../shared/ui/skeleton/skeleton.component';
-import type { TaskStatusChange } from '../../shared/ui/task-card/task-card.component';
-import { TaskCardComponent } from '../../shared/ui/task-card/task-card.component';
+import { NOW } from '@core/config/app-config';
+import type { Task } from '@core/models';
+import { TaskStore } from '@core/state/task.store';
+import { isOverdue, parseIsoDate } from '@core/utils/date.utils';
+import { TaskActionsService } from '@shared/task-dialogs/task-actions.service';
+import { EmptyStateComponent } from '@shared/ui/empty-state/empty-state.component';
+import { SkeletonComponent } from '@shared/ui/skeleton/skeleton.component';
+import type { TaskStatusChange } from '@shared/ui/task-card/task-card.component';
+import { TaskCardComponent } from '@shared/ui/task-card/task-card.component';
 
 export interface AgendaGroup {
   key: string;

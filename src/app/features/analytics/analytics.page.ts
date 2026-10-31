@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
-import { NOW } from '../../core/config/app-config';
-import { PRIORITY_LABELS, STATUS_LABELS, TASK_PRIORITIES, TASK_STATUSES } from '../../core/models';
+import { NOW } from '@core/config/app-config';
+import { PRIORITY_LABELS, STATUS_LABELS, TASK_PRIORITIES, TASK_STATUSES } from '@core/models';
 import { ActivityStore } from '@core/state/activity.store';
 import { TaskStore } from '@core/state/task.store';
 import { UserStore } from '@core/state/user.store';
