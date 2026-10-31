@@ -140,7 +140,7 @@ export default class TasksPage {
   }
 
   protected dueInfo(task: Task) {
-    return getDueInfo(task, this.today);
+    return getDueInfo(task, this.today());
   }
 
   protected dueDate(task: Task): Date {

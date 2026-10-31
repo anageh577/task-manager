@@ -65,7 +65,7 @@ export default class TeamPage {
         todo: counts.todo,
         inProgress: counts.in_progress,
         done: counts.done,
-        overdue: own.filter((task) => isOverdue(task, this.today)).length,
+        overdue: own.filter((task) => isOverdue(task, this.today())).length,
         total: own.length,
         completion: own.length ? Math.round((counts.done / own.length) * 100) : 0,
       };

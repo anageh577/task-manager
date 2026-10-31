@@ -87,7 +87,7 @@ export function buildAgenda(
               @for (task of group.tasks; track task.id) {
                 <app-task-card
                   [task]="task"
-                  [today]="today"
+                  [today]="today()"
                   (edit)="actions.openEdit($event)"
                   (delete)="actions.confirmDelete($event)"
                   (statusChange)="onStatusChange($event)"
@@ -139,7 +139,7 @@ export default class CalendarPage {
   protected readonly includeDone = signal(false);
 
   protected readonly agenda = computed(() =>
-    buildAgenda(this.tasks.tasks(), this.today, this.includeDone()),
+    buildAgenda(this.tasks.tasks(), this.today(), this.includeDone()),
   );
 
   protected onStatusChange({ task, status }: TaskStatusChange): void {

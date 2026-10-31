@@ -216,7 +216,7 @@ export class TaskFormDialogComponent {
           [maxItemsValidator(MAX_TAGS), uniqueItemsValidator],
         ),
       },
-      { validators: dueDateValidator({ today: () => this.now, allowedDate: task?.dueDate }) },
+      { validators: dueDateValidator({ today: () => this.now(), allowedDate: task?.dueDate }) },
     );
   }
 

@@ -77,7 +77,7 @@
         <app-activity-feed
           [activities]="activity.activities()"
           [loading]="activity.isLoading() && !activity.activities().length"
-          [now]="now"
+          [now]="now()"
         />
       }
     </section>

@@ -29,7 +29,7 @@
       [columns]="tasks.columns()"
       [statusFilter]="statusFilter()"
       [loading]="tasks.isInitialLoad()"
-      [today]="today"
+      [today]="today()"
       (moved)="onMove($event)"
       (edit)="actions.openEdit($event)"
       (delete)="actions.confirmDelete($event)"
