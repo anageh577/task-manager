@@ -12,7 +12,7 @@
     [users]="users.users()"
     [hasActiveFilters]="tasks.hasActiveFilters()"
     (filtersChange)="updateFilters($event)"
-    (reset)="tasks.resetFilters()"
+    (resetFilters)="tasks.resetFilters()"
     (newTask)="actions.openCreate()"
   />
 

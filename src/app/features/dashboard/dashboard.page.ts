@@ -64,7 +64,6 @@ export default class DashboardPage {
   }
 
   protected onStatusChange({ task, status }: TaskStatusChange): void {
-    console.log('onStatusChange', task, status);
     void this.actions.changeStatus(task, status);
   }
 }

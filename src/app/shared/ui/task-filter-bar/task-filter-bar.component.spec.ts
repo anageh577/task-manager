@@ -89,7 +89,7 @@ describe('TaskFilterBarComponent', () => {
   it('shows "Clear filters" only when filters are active and emits reset/newTask', async () => {
     let resets = 0;
     let creates = 0;
-    fixture.componentInstance.reset.subscribe(() => resets++);
+    fixture.componentInstance.resetFilters.subscribe(() => resets++);
     fixture.componentInstance.newTask.subscribe(() => creates++);
 
     await render(DEFAULT_TASK_FILTERS);

@@ -14,7 +14,9 @@
 
 <div class="actions">
   @if (hasActiveFilters()) {
-    <button mat-button type="button" class="clear" (click)="reset.emit()">Clear filters</button>
+    <button mat-button type="button" class="clear" (click)="resetFilters.emit()">
+      Clear filters
+    </button>
   }
 
   <button

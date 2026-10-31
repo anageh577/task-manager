@@ -19,7 +19,7 @@ export class TaskFilterBarComponent {
   readonly hasActiveFilters = input(false);
 
   readonly filtersChange = output<Partial<TaskFilters>>();
-  readonly reset = output<void>();
+  readonly resetFilters = output<void>();
   readonly newTask = output<void>();
 
   protected readonly all = ALL;
