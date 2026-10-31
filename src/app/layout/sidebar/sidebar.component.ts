@@ -12,6 +12,7 @@ export const NAV_ITEMS: readonly NavItem[] = [
   { path: '/dashboard', label: 'Dashboard', icon: '🏠' },
   { path: '/tasks', label: 'Tasks', icon: '✅' },
   { path: '/calendar', label: 'Calendar', icon: '📅' },
+  { path: '/analytics', label: 'Analytics', icon: '📈' },
 ];
 
 @Component({

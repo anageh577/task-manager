@@ -1,0 +1,85 @@
+<div class="tm-page">
+  <header class="tm-page-header">
+    <div>
+      <h1>Analytics</h1>
+      <p>How work is distributed across statuses, priorities and people.</p>
+    </div>
+  </header>
+
+  @if (tasks.error() && !tasks.tasks().length) {
+    <app-error-state
+      title="Analytics could not be loaded"
+      [message]="tasks.error() ?? ''"
+      [retrying]="tasks.isLoading()"
+      (retry)="tasks.reload()"
+    />
+  }
+
+  <div class="grid">
+    <section class="tm-panel card" aria-labelledby="status-chart-title">
+      <h2 id="status-chart-title">Tasks by status</h2>
+      @if (tasks.isInitialLoad()) {
+        <app-skeleton height="240px" />
+      } @else {
+        <app-chart
+          type="doughnut"
+          datasetLabel="Tasks by status"
+          [labels]="statusChart().labels"
+          [values]="statusChart().values"
+          [colors]="statusChart().colors"
+        />
+      }
+    </section>
+
+    <section class="tm-panel card" aria-labelledby="priority-chart-title">
+      <h2 id="priority-chart-title">Tasks by priority</h2>
+      @if (tasks.isInitialLoad()) {
+        <app-skeleton height="240px" />
+      } @else {
+        <app-chart
+          type="bar"
+          datasetLabel="Tasks by priority"
+          [labels]="priorityChart().labels"
+          [values]="priorityChart().values"
+          [colors]="priorityChart().colors"
+        />
+      }
+    </section>
+
+    <section class="tm-panel card" aria-labelledby="workload-chart-title">
+      <h2 id="workload-chart-title">
+        Open tasks per member
+        <span class="kpi">{{ completionRate() }}% completed overall</span>
+      </h2>
+      @if (tasks.isInitialLoad()) {
+        <app-skeleton height="240px" />
+      } @else {
+        <app-chart
+          type="bar"
+          datasetLabel="Open tasks per member"
+          [labels]="workloadChart().labels"
+          [values]="workloadChart().values"
+          [colors]="workloadChart().colors"
+        />
+      }
+    </section>
+
+    <section class="tm-panel card activity" aria-labelledby="activity-title">
+      <h2 id="activity-title">Recent activity</h2>
+      @if (activity.error(); as error) {
+        <app-error-state
+          title="Activity could not be loaded"
+          [message]="error"
+          [retrying]="activity.isLoading()"
+          (retry)="activity.reload()"
+        />
+      } @else {
+        <app-activity-feed
+          [activities]="activity.activities()"
+          [loading]="activity.isLoading() && !activity.activities().length"
+          [now]="now"
+        />
+      }
+    </section>
+  </div>
+</div>
