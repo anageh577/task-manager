@@ -21,7 +21,7 @@ export const NAV_ITEMS: readonly NavItem[] = [
   selector: 'app-sidebar',
   imports: [MatButtonModule, RouterLink, RouterLinkActive],
   template: `
-    <nav aria-label="Main navigation">
+    <nav id="app-navigation" aria-label="Main navigation">
       <ul>
         @for (item of items; track item.path) {
           <li>

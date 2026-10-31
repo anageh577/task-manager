@@ -1,3 +1,6 @@
+<p class="visually-hidden">
+  Reorder tasks by dragging them. Keyboard users can open a card's actions menu and choose Move to.
+</p>
 <div class="board" cdkDropListGroup [class.single]="visibleColumns().length === 1">
   @for (column of visibleColumns(); track column.status) {
     <section class="column tm-panel" [attr.aria-labelledby]="'column-' + column.status">

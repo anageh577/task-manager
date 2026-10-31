@@ -23,6 +23,11 @@
       (retry)="tasks.reload()"
     />
   } @else {
+    <p class="visually-hidden" aria-live="polite">
+      @if (tasks.hasActiveFilters()) {
+        {{ tasks.filteredTasks().length }} tasks match the filters
+      }
+    </p>
     <div class="table-wrapper tm-panel">
       @if (tasks.isInitialLoad()) {
         <div class="skeleton" aria-busy="true" aria-label="Loading tasks">

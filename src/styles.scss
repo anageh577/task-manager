@@ -144,6 +144,18 @@ button {
   outline: 2px solid var(--tm-primary);
   outline-offset: 2px;
 }
+// Screen-reader only. Used by page titles, live regions and chart data tables.
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
 
 // Reusable surface used by cards and panels.
 .tm-panel {
