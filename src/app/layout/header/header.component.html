@@ -5,8 +5,12 @@
       type="button"
       class="menu"
       aria-label="Toggle navigation"
+      [attr.aria-expanded]="navOpen()"
+      aria-controls="app-navigation"
       (click)="menuToggle.emit()"
-    ></button>
+    >
+      <span aria-hidden="true">☰</span>
+    </button>
   }
   <a routerLink="/dashboard" class="brand" aria-label="Task Manager home">
     <span class="logo">

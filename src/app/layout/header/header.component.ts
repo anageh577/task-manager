@@ -21,6 +21,7 @@ export class HeaderComponent {
     email: 'john.doe@example.com',
   });
   readonly showMenuButton = input(false);
+  readonly navOpen = input(false);
 
   readonly searchChange = output<string>();
   readonly menuToggle = output<void>();
