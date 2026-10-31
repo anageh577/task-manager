@@ -4,6 +4,7 @@ import DashboardPage from './features/dashboard/dashboard.page';
 import TasksPage from './features/tasks/tasks.page';
 import CalendarPage from './features/calendar/calendar.page';
 import AnalyticsPage from './features/analytics/analytics.page';
+import TeamPage from './features/team/team.page';
 
 export const routes: Routes = [
   {
@@ -25,6 +26,10 @@ export const routes: Routes = [
       {
         path: 'analytics',
         component: AnalyticsPage,
+      },
+      {
+        path: 'team',
+        component: TeamPage,
       },
     ],
   },

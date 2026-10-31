@@ -1,0 +1,68 @@
+<div class="tm-page">
+  <header class="tm-page-header">
+    <div>
+      <h1>Team</h1>
+      <p>{{ members().length }} members</p>
+    </div>
+  </header>
+
+  @if (users.error() && !members().length) {
+    <app-error-state
+      title="Team could not be loaded"
+      [message]="users.error() ?? ''"
+      [retrying]="users.isLoading()"
+      (retry)="users.reload()"
+    />
+  } @else if (users.isLoading() && !members().length) {
+    <div class="grid" aria-busy="true">
+      @for (i of [1, 2, 3, 4]; track i) {
+        <app-skeleton height="180px" radius="8px" />
+      }
+    </div>
+  } @else {
+    <ul class="grid" aria-label="Team members">
+      @for (member of members(); track member.user.id) {
+        <li class="tm-panel member" animate.enter="tm-enter">
+          <div class="identity">
+            <app-avatar [name]="member.user.name" [initials]="member.user.avatar" [size]="44" />
+            <div>
+              <h2>{{ member.user.name }}</h2>
+              <a [href]="'mailto:' + member.user.email">{{ member.user.email }}</a>
+            </div>
+          </div>
+          <dl class="counts">
+            <div>
+              <dt>To Do</dt>
+              <dd>{{ member.todo }}</dd>
+            </div>
+            <div>
+              <dt>In Progress</dt>
+              <dd>{{ member.inProgress }}</dd>
+            </div>
+            <div>
+              <dt>Done</dt>
+              <dd>{{ member.done }}</dd>
+            </div>
+            <div [class.alert]="member.overdue > 0">
+              <dt>Overdue</dt>
+              <dd>{{ member.overdue }}</dd>
+            </div>
+          </dl>
+          <div class="progress">
+            <mat-progress-bar
+              mode="determinate"
+              [value]="member.completion"
+              [attr.aria-label]="member.user.name + ' completion'"
+            />
+            <span>{{ member.completion }}% complete</span>
+          </div>
+          <button mat-stroked-button type="button" (click)="viewTasks(member.user)">
+            View tasks
+          </button>
+        </li>
+      } @empty {
+        <app-empty-state icon="👥" title="No team members yet" />
+      }
+    </ul>
+  }
+</div>

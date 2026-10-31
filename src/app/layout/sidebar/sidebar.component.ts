@@ -13,6 +13,7 @@ export const NAV_ITEMS: readonly NavItem[] = [
   { path: '/tasks', label: 'Tasks', icon: '✅' },
   { path: '/calendar', label: 'Calendar', icon: '📅' },
   { path: '/analytics', label: 'Analytics', icon: '📈' },
+  { path: '/team', label: 'Team', icon: '👥' },
 ];
 
 @Component({

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import type { Activity, ActivityType } from '../../../core/models';
+import type { Activity, ActivityType } from '@core/models';
 import { RelativeTimePipe } from '@shared/pipes/relative-time.pipe';
 import { EmptyStateComponent } from '../empty-state/empty-state.component';
 import { SkeletonComponent } from '../skeleton/skeleton.component';
