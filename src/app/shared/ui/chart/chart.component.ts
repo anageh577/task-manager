@@ -32,7 +32,7 @@ export type SimpleChartType = 'doughnut' | 'bar';
     </div>
     <ul class="visually-hidden">
       @for (label of labels(); track label; let i = $index) {
-        <li>{{ label }}: {{ values()[i] }} jjjj</li>
+        <li>{{ label }}: {{ values()[i] }}</li>
       }
     </ul>
   `,

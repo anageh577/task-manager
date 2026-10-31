@@ -2,7 +2,7 @@ import { httpResource } from '@angular/common/http';
 import { computed, inject, Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { TaskApiService } from '../api/task-api.service';
-import { APP_CONFIG, CURRENT_USER } from '../config/app-config';
+import { APP_CONFIG, CURRENT_USER, NOW } from '../config/app-config';
 import type { Activity, ActivityType, Task } from '../models';
 import { generateId } from '../utils/task.utils';
 import { errorMessage } from '@core/http/api-error';
@@ -15,6 +15,7 @@ export class ActivityStore {
   private readonly api = inject(TaskApiService);
   private readonly config = inject(APP_CONFIG);
   private readonly currentUser = inject(CURRENT_USER);
+  private readonly now = inject(NOW);
 
   private readonly resource = httpResource<Activity[]>(
     () => ({
@@ -48,7 +49,7 @@ export class ActivityStore {
       taskId: task.id,
       taskTitle: task.title,
       actor: this.currentUser.name,
-      timestamp: new Date().toISOString(),
+      timestamp: this.now().toISOString(),
       ...(detail ? { detail } : {}),
     };
     this.resource.value.update((current) => [activity, ...(current ?? [])]);

@@ -1,6 +1,7 @@
 {
   "name": "task-manager",
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "Task Management Dashboard - Senior Angular assignment",
   "scripts": {
     "ng": "ng",
     "generate:data": "node data-generator/generate-data.js",
@@ -11,6 +12,9 @@
     "serve": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
+    "test": "ng test --watch=false",
+    "test:watch": "ng test",
+    "test:coverage": "ng test --watch=false --coverage",
     "lint": "ng lint",
     "lint:fix": "ng lint --fix",
     "format": "prettier --write \"src/**/*.{ts,html,scss,json}\" \"*.{json,md}\" \"mock-server/**/*.{mjs,json}\"",

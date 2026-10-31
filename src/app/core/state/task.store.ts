@@ -2,7 +2,7 @@ import { httpResource } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { TaskApiService } from '../api/task-api.service';
-import { APP_CONFIG } from '../config/app-config';
+import { APP_CONFIG, NOW } from '../config/app-config';
 import type { Task, TaskDraft, TaskFilters, TaskStatus } from '../models';
 import { DEFAULT_TASK_FILTERS, STATUS_LABELS } from '../models';
 import {
@@ -31,6 +31,7 @@ export class TaskStore {
   private readonly api = inject(TaskApiService);
   private readonly activity = inject(ActivityStore);
   private readonly config = inject(APP_CONFIG);
+  private readonly now = inject(NOW);
 
   private readonly resource = httpResource<Task[]>(() => `${this.config.apiUrl}/tasks`, {
     defaultValue: [],
@@ -61,7 +62,7 @@ export class TaskStore {
   readonly statusCounts = computed(() => countByStatus(this.tasks()));
   readonly priorityCounts = computed(() => countByPriority(this.tasks()));
   readonly overdueCount = computed(() => {
-    const today = new Date();
+    const today = this.now();
     return this.tasks().filter((task) => isOverdue(task, today)).length;
   });
 
@@ -82,7 +83,7 @@ export class TaskStore {
   }
 
   async create(draft: TaskDraft): Promise<Task> {
-    const timestamp = new Date().toISOString();
+    const timestamp = this.now().toISOString();
     const task: Task = {
       ...draft,
       id: generateId('task'),
@@ -105,7 +106,7 @@ export class TaskStore {
     const changes: Partial<Task> = {
       ...draft,
       ...this.statusSideEffects(existing, draft.status),
-      updatedAt: new Date().toISOString(),
+      updatedAt: this.now().toISOString(),
     };
 
     await this.persist(id, changes);
@@ -126,7 +127,7 @@ export class TaskStore {
       status,
       order,
       ...this.statusSideEffects(existing, status),
-      updatedAt: new Date().toISOString(),
+      updatedAt: this.now().toISOString(),
     });
     if (existing.status !== status) this.recordActivity(existing, status);
   }
@@ -168,7 +169,7 @@ export class TaskStore {
     nextStatus: TaskStatus,
   ): Partial<Pick<Task, 'completedAt'>> {
     if (task.status === nextStatus) return {};
-    return { completedAt: nextStatus === 'done' ? new Date().toISOString() : null };
+    return { completedAt: nextStatus === 'done' ? this.now().toISOString() : null };
   }
 
   private recordActivity(before: Task, nextStatus: TaskStatus): void {
