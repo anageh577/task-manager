@@ -3,5 +3,5 @@ coverage
 .angular
 node_modules
 mock-server/db.json
-data-fetching
+data-generator
 package-lock.json

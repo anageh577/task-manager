@@ -12,7 +12,7 @@ RUN npx ng build --configuration production
 
 # --- Mock REST API (json-server) ----------------------------------------------
 FROM deps AS api
-COPY data-fetching ./data-fetching
+COPY data-generator ./data-generator
 COPY mock-server ./mock-server
 EXPOSE 3000
 CMD ["sh", "-c", "node mock-server/build-db.mjs && npx json-server --host 0.0.0.0 --port 3000 --watch mock-server/db.json --routes mock-server/routes.json"]
