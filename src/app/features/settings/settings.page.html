@@ -1,0 +1,27 @@
+<div class="tm-page">
+  <header class="tm-page-header">
+    <h1>Settings</h1>
+  </header>
+
+  <section class="tm-panel card" aria-labelledby="profile-title">
+    <h2 id="profile-title">Profile</h2>
+    <div class="profile">
+      <app-avatar [name]="user.name" [initials]="user.avatar" [size]="48" />
+      <div>
+        <p class="name">{{ user.name }}</p>
+        <p class="muted">{{ user.email }}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="tm-panel card" aria-labelledby="data-title">
+    <h2 id="data-title">Data</h2>
+    <p class="muted">
+      API responses are cached for a short time to keep navigation instant. Refresh to fetch the
+      latest data from the server.
+    </p>
+    <div>
+      <button mat-stroked-button type="button" (click)="refresh()">Refresh data</button>
+    </div>
+  </section>
+</div>

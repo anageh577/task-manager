@@ -14,6 +14,7 @@ export const NAV_ITEMS: readonly NavItem[] = [
   { path: '/calendar', label: 'Calendar', icon: '📅' },
   { path: '/analytics', label: 'Analytics', icon: '📈' },
   { path: '/team', label: 'Team', icon: '👥' },
+  { path: '/settings', label: 'Settings', icon: '⚙️' },
 ];
 
 @Component({

@@ -5,6 +5,7 @@ import TasksPage from './features/tasks/tasks.page';
 import CalendarPage from './features/calendar/calendar.page';
 import AnalyticsPage from './features/analytics/analytics.page';
 import TeamPage from './features/team/team.page';
+import SettingsPage from './features/settings/settings.page';
 
 export const routes: Routes = [
   {
@@ -30,6 +31,10 @@ export const routes: Routes = [
       {
         path: 'team',
         component: TeamPage,
+      },
+      {
+        path: 'settings',
+        component: SettingsPage,
       },
     ],
   },
