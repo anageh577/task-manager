@@ -4,12 +4,24 @@ import { PRIORITY_LABELS } from '@core/models';
 
 @Component({
   selector: 'app-priority-badge',
-  template: `<span class="visually-hidden">Priority: </span>{{ label() }}`,
+  template: `<span class="sr-only">Priority: </span>{{ label() }}`,
   styles: `
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
     :host {
+      position: relative;
       display: inline-flex;
       align-items: center;
-      padding: 2px 8px;
+      padding: 5px 8px;
       border-radius: var(--tm-radius-sm);
       font-size: 10px;
       font-weight: 700;
@@ -18,16 +30,16 @@ import { PRIORITY_LABELS } from '@core/models';
       line-height: 16px;
     }
     :host(.high) {
-      background: var(--tm-danger-soft);
-      color: #c62828;
+      background: #fdecea;
+      color: #c23f38;
     }
     :host(.medium) {
-      background: var(--tm-warning-soft);
-      color: #b45309;
+      background: #fff1e0;
+      color: #e67700;
     }
     :host(.low) {
-      background: var(--tm-success-soft);
-      color: #2e7d32;
+      background: #fdf4e2;
+      color: #508c46;
     }
   `,
   host: { '[class]': 'priority()' },
