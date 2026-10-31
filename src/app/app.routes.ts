@@ -1,44 +1,43 @@
 import type { Routes } from '@angular/router';
-import { ShellComponent } from './layout/shell/shell.component';
-import DashboardPage from './features/dashboard/dashboard.page';
-import TasksPage from './features/tasks/tasks.page';
-import CalendarPage from './features/calendar/calendar.page';
-import AnalyticsPage from './features/analytics/analytics.page';
-import TeamPage from './features/team/team.page';
-import SettingsPage from './features/settings/settings.page';
-import NotFoundPage from './features/not-found/not-found.page';
 
+/**
+ * Every page is a separate chunk. `PreloadAllModules` (see `app.config.ts`) fetches them
+ * after the first paint, so navigation stays instant without paying for them up front.
+ */
 export const routes: Routes = [
   {
     path: '',
-    component: ShellComponent,
+    loadComponent: () => import('./layout/shell/shell.component').then((m) => m.ShellComponent),
     children: [
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
       {
         path: 'dashboard',
-        component: DashboardPage,
+        loadComponent: () => import('./features/dashboard/dashboard.page').then((m) => m.default),
       },
       {
         path: 'tasks',
-        component: TasksPage,
+        loadComponent: () => import('./features/tasks/tasks.page').then((m) => m.default),
       },
       {
         path: 'calendar',
-        component: CalendarPage,
+        loadComponent: () => import('./features/calendar/calendar.page').then((m) => m.default),
       },
       {
         path: 'analytics',
-        component: AnalyticsPage,
+        loadComponent: () => import('./features/analytics/analytics.page').then((m) => m.default),
       },
       {
         path: 'team',
-        component: TeamPage,
+        loadComponent: () => import('./features/team/team.page').then((m) => m.default),
       },
       {
         path: 'settings',
-        component: SettingsPage,
+        loadComponent: () => import('./features/settings/settings.page').then((m) => m.default),
       },
-      { path: '**', component: NotFoundPage },
+      {
+        path: '**',
+        loadComponent: () => import('./features/not-found/not-found.page').then((m) => m.default),
+      },
     ],
   },
 ];
