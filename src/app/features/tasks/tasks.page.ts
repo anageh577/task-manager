@@ -4,11 +4,14 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  effect,
   inject,
+  input,
   linkedSignal,
   signal,
+  untracked,
 } from '@angular/core';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import type { PageEvent } from '@angular/material/paginator';
@@ -17,7 +20,6 @@ import { MatSelectModule } from '@angular/material/select';
 import type { Sort } from '@angular/material/sort';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
-import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs';
 import { NOW } from '@core/config/app-config';
 import type { Task, TaskFilters, TaskStatus } from '@core/models';
@@ -82,8 +84,13 @@ export default class TasksPage {
   protected readonly tasks = inject(TaskStore);
   protected readonly users = inject(UserStore);
   protected readonly actions = inject(TaskActionsService);
-  private readonly route = inject(ActivatedRoute);
   private readonly today = inject(NOW);
+
+  /**
+   * Bound from `?userId=` by `withComponentInputBinding`.
+   * The assignee filter lives in memory, so a reload restores it from this input.
+   */
+  protected readonly userId = input<string>();
 
   private readonly isCompact = toSignal(
     inject(BreakpointObserver)
@@ -123,19 +130,20 @@ export default class TasksPage {
   protected readonly skeletonRows = [1, 2, 3, 4, 5];
 
   constructor() {
-    // The assignee filter lives in memory, so a reload has to read `?userId=` again.
     let appliedFromUrl: string | null = null;
-    this.route.queryParamMap.pipe(takeUntilDestroyed()).subscribe((params) => {
-      const userId = params.get('userId');
-      if (userId) {
-        appliedFromUrl = userId;
-        this.tasks.updateFilters({ assigneeId: userId });
-        return;
-      }
-      if (appliedFromUrl && this.tasks.filters().assigneeId === appliedFromUrl) {
-        this.tasks.updateFilters({ assigneeId: ALL });
-      }
-      appliedFromUrl = null;
+    effect(() => {
+      const userId = this.userId();
+      untracked(() => {
+        if (userId) {
+          appliedFromUrl = userId;
+          this.tasks.updateFilters({ assigneeId: userId });
+          return;
+        }
+        if (appliedFromUrl && this.tasks.filters().assigneeId === appliedFromUrl) {
+          this.tasks.updateFilters({ assigneeId: ALL });
+        }
+        appliedFromUrl = null;
+      });
     });
   }
 

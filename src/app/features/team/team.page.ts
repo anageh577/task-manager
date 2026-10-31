@@ -1,9 +1,7 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { ActivatedRoute, Router } from '@angular/router';
-import { map } from 'rxjs';
+import { Router } from '@angular/router';
 import { NOW } from '@core/config/app-config';
 import type { Assignee } from '@core/models';
 import { DEFAULT_TASK_FILTERS } from '@core/models';
@@ -45,17 +43,16 @@ export default class TeamPage {
   protected readonly users = inject(UserStore);
   private readonly tasks = inject(TaskStore);
   private readonly router = inject(Router);
-  private readonly route = inject(ActivatedRoute);
   private readonly today = inject(NOW);
 
-  /** `?userId=` limits the roster to one member. Missing means everyone. */
-  private readonly userId = toSignal(
-    this.route.queryParamMap.pipe(map((params) => params.get('userId'))),
-    { initialValue: this.route.snapshot.queryParamMap.get('userId') },
-  );
+  /**
+   * Bound from `?userId=` by `withComponentInputBinding`.
+   * Missing means the full roster.
+   */
+  protected readonly userId = input<string>();
 
   protected readonly members = computed<TeamMemberSummary[]>(() => {
-    const userId = this.userId() ?? new URLSearchParams(globalThis.location.search).get('userId');
+    const userId = this.userId();
     const roster = this.users.users().filter((user) => !userId || user.id === userId);
     return roster.map((user) => {
       const own = this.tasks.tasks().filter((task) => task.assignee.id === user.id);
