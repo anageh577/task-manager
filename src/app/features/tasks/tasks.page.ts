@@ -8,7 +8,7 @@ import {
   linkedSignal,
   signal,
 } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import type { PageEvent } from '@angular/material/paginator';
@@ -17,10 +17,11 @@ import { MatSelectModule } from '@angular/material/select';
 import type { Sort } from '@angular/material/sort';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
+import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs';
 import { NOW } from '@core/config/app-config';
 import type { Task, TaskFilters, TaskStatus } from '@core/models';
-import { STATUS_LABELS, TASK_PRIORITIES, TASK_STATUSES } from '@core/models';
+import { ALL, STATUS_LABELS, TASK_PRIORITIES, TASK_STATUSES } from '@core/models';
 import { TaskStore } from '@core/state/task.store';
 import { UserStore } from '@core/state/user.store';
 import { getDueInfo, parseIsoDate } from '@core/utils/date.utils';
@@ -81,6 +82,7 @@ export default class TasksPage {
   protected readonly tasks = inject(TaskStore);
   protected readonly users = inject(UserStore);
   protected readonly actions = inject(TaskActionsService);
+  private readonly route = inject(ActivatedRoute);
   private readonly today = inject(NOW);
 
   private readonly isCompact = toSignal(
@@ -119,6 +121,23 @@ export default class TasksPage {
     this.tasks.tasks().length ? null : this.tasks.error(),
   );
   protected readonly skeletonRows = [1, 2, 3, 4, 5];
+
+  constructor() {
+    // The assignee filter lives in memory, so a reload has to read `?userId=` again.
+    let appliedFromUrl: string | null = null;
+    this.route.queryParamMap.pipe(takeUntilDestroyed()).subscribe((params) => {
+      const userId = params.get('userId');
+      if (userId) {
+        appliedFromUrl = userId;
+        this.tasks.updateFilters({ assigneeId: userId });
+        return;
+      }
+      if (appliedFromUrl && this.tasks.filters().assigneeId === appliedFromUrl) {
+        this.tasks.updateFilters({ assigneeId: ALL });
+      }
+      appliedFromUrl = null;
+    });
+  }
 
   protected dueInfo(task: Task) {
     return getDueInfo(task, this.today);
