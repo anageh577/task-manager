@@ -1,9 +1,11 @@
 import { InjectionToken } from '@angular/core';
 import type { Assignee } from '../models';
-import { environment } from '@environments/environment.development';
+import { environment } from '@environments/environment';
 
 export interface AppConfig {
   apiUrl: string;
+  cacheTtlMs: number;
+  retry: { count: number; initialDelayMs: number };
 }
 
 /** Runtime configuration, injectable so tests can shorten TTLs/retry delays. */
