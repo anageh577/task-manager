@@ -17,6 +17,10 @@ import { CHART_LOADER } from './chart-loader';
 
 export type SimpleChartType = 'doughnut' | 'bar';
 
+function prefersReducedMotion(): boolean {
+  return typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
 /**
  * Minimal Chart.js wrapper driven by signal inputs.
  *
@@ -104,7 +108,7 @@ export class ChartComponent {
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        animation: { duration: 400 },
+        animation: { duration: prefersReducedMotion() ? 0 : 400 },
         plugins: {
           legend: {
             display: !isBar,
