@@ -1,6 +1,7 @@
 import { httpResource } from '@angular/common/http';
 import { computed, inject, Injectable } from '@angular/core';
 import { APP_CONFIG } from '../config/app-config';
+import { registerForRefresh } from '../services/data-refresh.service';
 import { TaskStore } from './task.store';
 import type { Statistic, StatisticsResponse } from '@core/models';
 
@@ -84,6 +85,10 @@ export class StatisticsStore {
       value: liveValues[fallback.id] ?? 0,
     }));
   });
+
+  constructor() {
+    registerForRefresh(() => this.reload());
+  }
 
   reload(): void {
     this.resource.reload();

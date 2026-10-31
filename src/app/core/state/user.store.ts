@@ -2,6 +2,7 @@ import { httpResource } from '@angular/common/http';
 import { computed, inject, Injectable } from '@angular/core';
 import { APP_CONFIG } from '../config/app-config';
 import { errorMessage } from '../http/api-error';
+import { registerForRefresh } from '../services/data-refresh.service';
 import type { Assignee } from '../models';
 import { uniqueAssignees } from '../utils/task.utils';
 import { TaskStore } from './task.store';
@@ -27,6 +28,10 @@ export class UserStore {
     const error = this.resource.error();
     return error ? errorMessage(error) : null;
   });
+
+  constructor() {
+    registerForRefresh(() => this.reload());
+  }
 
   reload(): void {
     this.resource.reload();

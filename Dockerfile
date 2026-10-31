@@ -14,6 +14,8 @@ RUN npx ng build --configuration production
 FROM deps AS api
 COPY data-generator ./data-generator
 COPY mock-server ./mock-server
+# Seed files are gitignored, so generate them in the image. Startup rebuilds db.json from them.
+RUN node data-generator/generate-data.js && node mock-server/build-db.mjs
 EXPOSE 3000
 CMD ["sh", "-c", "node mock-server/build-db.mjs && npx json-server --host 0.0.0.0 --port 3000 --watch mock-server/db.json --routes mock-server/routes.json"]
 

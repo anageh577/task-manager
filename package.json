@@ -10,7 +10,7 @@
     "preapi": "node mock-server/build-db.mjs",
     "start": "npm run generate:data && concurrently -k -n api,web -c magenta,cyan \"npm:api\" \"npm:serve\"",
     "serve": "ng serve",
-    "build": "ng build",
+    "build": "ng build --configuration production,firebase",
     "watch": "ng build --watch --configuration development",
     "test": "ng test --watch=false",
     "test:watch": "ng test",

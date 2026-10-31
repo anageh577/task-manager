@@ -15,6 +15,8 @@ import {
   orderBetween,
 } from '../utils/task.utils';
 import { errorMessage } from '@core/http/api-error';
+import { HttpCacheService } from '@core/http/http-cache.service';
+import { registerForRefresh } from '@core/services/data-refresh.service';
 import { ActivityStore } from './activity.store';
 import { isOverdue } from '@core/utils/date.utils';
 
@@ -30,6 +32,7 @@ import { isOverdue } from '@core/utils/date.utils';
 export class TaskStore {
   private readonly api = inject(TaskApiService);
   private readonly activity = inject(ActivityStore);
+  private readonly cache = inject(HttpCacheService);
   private readonly config = inject(APP_CONFIG);
   private readonly now = inject(NOW);
 
@@ -66,8 +69,22 @@ export class TaskStore {
     return this.tasks().filter((task) => isOverdue(task, today)).length;
   });
 
+  constructor() {
+    registerForRefresh(() => this.reload());
+  }
+
   reload(): void {
     this.resource.reload();
+  }
+
+  /**
+   * Fetches tasks when the cached GET has expired. A dashboard visit inside
+   * `cacheTtlMs` keeps the list already loaded in this tab.
+   */
+  reloadIfStale(): void {
+    if (this.isLoading()) return;
+    if (this.cache.get(`${this.config.apiUrl}/tasks`)) return;
+    this.reload();
   }
 
   updateFilters(changes: Partial<TaskFilters>): void {

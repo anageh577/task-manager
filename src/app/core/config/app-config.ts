@@ -6,6 +6,11 @@ export interface AppConfig {
   apiUrl: string;
   cacheTtlMs: number;
   retry: { count: number; initialDelayMs: number };
+  /**
+   * Realtime Database base URL. Null keeps `/api` on json-server (local and Docker).
+   * Set for the Firebase Hosting build, which has no server process of its own.
+   */
+  databaseUrl: string | null;
 }
 
 /** Runtime configuration, injectable so tests can shorten TTLs/retry delays. */

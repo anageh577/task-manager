@@ -2,6 +2,8 @@ import { ApplicationRef } from '@angular/core';
 import { HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { makeTask, provideTestEnvironment, SARAH, TODAY } from '../../testing/fixtures';
+import { NOW } from '../config/app-config';
+import { cacheInterceptor } from '../http/cache.interceptor';
 import type { Activity, Task, TaskDraft } from '../models';
 import { TaskStore } from './task.store';
 
@@ -258,5 +260,53 @@ describe('TaskStore', () => {
       await expect(pending).rejects.toBeTruthy();
       expect(store.getById('c')).toEqual(progress);
     });
+  });
+});
+
+describe('TaskStore.reloadIfStale', () => {
+  let now: number;
+  let store: TaskStore;
+  let controller: HttpTestingController;
+
+  const loaded = makeTask({ id: 'cached', title: 'Cached' });
+  const settle = () => TestBed.inject(ApplicationRef).whenStable();
+
+  beforeEach(async () => {
+    now = TODAY.getTime();
+    TestBed.configureTestingModule({
+      providers: [
+        provideTestEnvironment([cacheInterceptor]),
+        { provide: NOW, useValue: () => new Date(now) },
+      ],
+    });
+    store = TestBed.inject(TaskStore);
+    controller = TestBed.inject(HttpTestingController);
+
+    TestBed.tick();
+    controller.expectOne('/api/tasks').flush([loaded]);
+    controller
+      .match((req) => req.url === '/api/activities' && req.method === 'GET')
+      .forEach((req) => req.flush([]));
+    await settle();
+  });
+
+  afterEach(() => controller.verify());
+
+  it('keeps the loaded tasks while the HTTP cache is fresh', () => {
+    store.reloadIfStale();
+    TestBed.tick();
+    controller.expectNone('/api/tasks');
+    expect(store.tasks()).toEqual([loaded]);
+  });
+
+  it('requests tasks again once the cache has expired', async () => {
+    now += 30_000;
+    store.reloadIfStale();
+    TestBed.tick();
+
+    const updated = [{ ...loaded, title: 'From the API', status: 'done' as const }];
+    controller.expectOne('/api/tasks').flush(updated);
+    await settle();
+    expect(store.tasks()).toEqual(updated);
   });
 });

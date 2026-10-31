@@ -1,12 +1,8 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { CURRENT_USER } from '@core/config/app-config';
-import { HttpCacheService } from '@core/http/http-cache.service';
+import { DataRefreshService } from '@core/services/data-refresh.service';
 import { NotificationService } from '@core/services/notification.service';
-import { ActivityStore } from '@core/state/activity.store';
-import { StatisticsStore } from '@core/state/statistics.store';
-import { TaskStore } from '@core/state/task.store';
-import { UserStore } from '@core/state/user.store';
 import { AvatarComponent } from '@shared/ui/avatar/avatar.component';
 
 /** Profile summary and data/cache maintenance. */
@@ -20,17 +16,10 @@ import { AvatarComponent } from '@shared/ui/avatar/avatar.component';
 export default class SettingsPage {
   protected readonly user = inject(CURRENT_USER);
   private readonly notify = inject(NotificationService);
-  private readonly cache = inject(HttpCacheService);
-  private readonly stores = [
-    inject(TaskStore),
-    inject(StatisticsStore),
-    inject(UserStore),
-    inject(ActivityStore),
-  ];
+  private readonly dataRefresh = inject(DataRefreshService);
 
   protected refresh(): void {
-    this.cache.clear();
-    this.stores.forEach((store) => store.reload());
+    this.dataRefresh.refresh();
     this.notify.success('Data refreshed');
   }
 }

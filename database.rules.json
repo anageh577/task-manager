@@ -1,0 +1,20 @@
+{
+  "rules": {
+    "tasks": {
+      ".read": true,
+      ".write": true
+    },
+    "users": {
+      ".read": true,
+      ".write": true
+    },
+    "activities": {
+      ".read": true,
+      ".write": true
+    },
+    "statistics": {
+      ".read": true,
+      ".write": true
+    }
+  }
+}

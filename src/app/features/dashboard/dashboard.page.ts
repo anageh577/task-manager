@@ -41,6 +41,10 @@ export default class DashboardPage {
   protected readonly actions = inject(TaskActionsService);
   protected readonly today = inject(NOW);
 
+  constructor() {
+    this.tasks.reloadIfStale();
+  }
+
   protected readonly statusFilter = computed<TaskStatus | null>(() => {
     const status = this.tasks.filters().status;
     return status === ALL ? null : status;

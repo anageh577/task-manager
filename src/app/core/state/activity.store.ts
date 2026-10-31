@@ -6,6 +6,7 @@ import { APP_CONFIG, CURRENT_USER, NOW } from '../config/app-config';
 import type { Activity, ActivityType, Task } from '../models';
 import { generateId } from '../utils/task.utils';
 import { errorMessage } from '@core/http/api-error';
+import { registerForRefresh } from '@core/services/data-refresh.service';
 
 export const ACTIVITY_FEED_LIMIT = 20;
 
@@ -33,6 +34,10 @@ export class ActivityStore {
     const error = this.resource.error();
     return error ? errorMessage(error) : null;
   });
+
+  constructor() {
+    registerForRefresh(() => this.reload());
+  }
 
   reload(): void {
     this.resource.reload();

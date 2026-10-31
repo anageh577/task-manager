@@ -17,6 +17,7 @@ export const TEST_CONFIG: AppConfig = {
   apiUrl: '/api',
   cacheTtlMs: 30_000,
   retry: { count: 2, initialDelayMs: 10 },
+  databaseUrl: null,
 };
 
 export const JOHN: Assignee = {

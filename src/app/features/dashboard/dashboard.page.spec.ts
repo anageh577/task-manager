@@ -1,6 +1,9 @@
 import type { ComponentFixture } from '@angular/core/testing';
+import { HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { NOW } from '../../core/config/app-config';
+import { cacheInterceptor } from '../../core/http/cache.interceptor';
 import { TaskStore } from '../../core/state/task.store';
 import { TaskActionsService } from '../../shared/task-dialogs/task-actions.service';
 import { TaskCardComponent } from '../../shared/ui/task-card/task-card.component';
@@ -12,6 +15,7 @@ import {
   mockTaskActions,
   provideTestEnvironment,
   SARAH,
+  TODAY,
 } from '../../testing/fixtures';
 import DashboardPage from './dashboard.page';
 import { TaskBoardComponent } from './task-board/task-board.component';
@@ -106,5 +110,50 @@ describe('DashboardPage', () => {
     expect(actions.changeStatus).toHaveBeenCalledWith(overdue, 'in_progress');
     expect(actions.openCreate).toHaveBeenCalledWith('done');
     expect(actions.openCreate).toHaveBeenCalledTimes(2);
+  });
+});
+
+describe('DashboardPage task refresh', () => {
+  let now: number;
+
+  const cachedTask = makeTask({ id: 'task-cached', title: 'Cached task', status: 'todo' });
+
+  beforeEach(() => {
+    now = TODAY.getTime();
+    TestBed.configureTestingModule({
+      providers: [
+        provideTestEnvironment([cacheInterceptor]),
+        { provide: NOW, useValue: () => new Date(now) },
+        { provide: TaskActionsService, useValue: mockTaskActions() },
+      ],
+    });
+  });
+
+  it('calls the tasks API when the dashboard is opened after the cache expires', async () => {
+    const first = TestBed.createComponent(DashboardPage);
+    await flushBackend({ tasks: [cachedTask], users: [JOHN] });
+    expect(first.nativeElement.textContent).toContain('Cached task');
+    first.destroy();
+
+    const withinTtl = TestBed.createComponent(DashboardPage);
+    TestBed.tick();
+    TestBed.inject(HttpTestingController).expectNone(
+      (req) => req.method === 'GET' && req.url === '/api/tasks',
+    );
+    expect(withinTtl.nativeElement.textContent).toContain('Cached task');
+    withinTtl.destroy();
+
+    now += 30_000;
+    const afterTtl = TestBed.createComponent(DashboardPage);
+    TestBed.tick();
+    const request = TestBed.inject(HttpTestingController).expectOne(
+      (req) => req.method === 'GET' && req.url === '/api/tasks',
+    );
+    request.flush([{ ...cachedTask, title: 'Fresh task', status: 'done' }]);
+    await afterTtl.whenStable();
+
+    expect(afterTtl.nativeElement.textContent).toContain('Fresh task');
+    expect(TestBed.inject(TaskStore).tasks()[0]?.status).toBe('done');
+    afterTtl.destroy();
   });
 });

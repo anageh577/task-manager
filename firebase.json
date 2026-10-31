@@ -1,5 +1,9 @@
 {
+  "database": {
+    "rules": "database.rules.json"
+  },
   "hosting": {
+    "predeploy": ["node mock-server/seed-firebase.mjs"],
     "public": "dist/task-manager/browser",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
