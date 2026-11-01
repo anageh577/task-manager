@@ -1,5 +1,11 @@
 # Task Manager — project documentation
 
+The project is deployed on Firebase Hosting: [https://task-manager-f67c6.web.app](https://task-manager-f67c6.web.app).
+
+It uses Firebase Realtime Database: [https://task-manager-f67c6-default-rtdb.firebaseio.com](https://task-manager-f67c6-default-rtdb.firebaseio.com).
+
+The database is created from [`data-generator/generate-data.js`](data-generator/generate-data.js). Every Firebase deploy regenerates those JSON files and writes them to the database. The hosting predeploy hook runs [`mock-server/seed-firebase.mjs`](mock-server/seed-firebase.mjs), which runs the generator, rebuilds `mock-server/db.json`, and replaces each collection. A deploy on `main` does this after the production build, so the live database is replaced with fresh data.
+
 A task dashboard for creating, editing, deleting, searching, filtering, and moving work. It also shows live statistics, charts, a team roster, a calendar agenda, and a recent activity feed.
 
 The desktop layout follows the [Figma design](https://www.figma.com/design/inRRwrw0RP3v5eIXVx6grq/senior---frontend?node-id=0-1). Tablet and phone reuse that layout.
