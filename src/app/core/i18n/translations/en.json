@@ -1,0 +1,271 @@
+{
+  "app": {
+    "name": "Task Manager",
+    "description": "Task Management Dashboard: plan, track and complete your team's work."
+  },
+  "language": {
+    "label": "Language",
+    "english": "English",
+    "german": "Deutsch"
+  },
+  "nav": {
+    "label": "Main navigation",
+    "dashboard": "Dashboard",
+    "tasks": "Tasks",
+    "calendar": "Calendar",
+    "analytics": "Analytics",
+    "team": "Team",
+    "settings": "Settings"
+  },
+  "shell": {
+    "skip": "Skip to main content"
+  },
+  "header": {
+    "home": "{{name}} home",
+    "toggleNav": "Toggle navigation",
+    "searchLabel": "Search tasks",
+    "searchPlaceholder": "Search tasks...",
+    "notifications": "Notifications: {{count}} overdue tasks",
+    "account": "{{avatar}}, account menu for {{name}}",
+    "settings": "Settings"
+  },
+  "action": {
+    "newTask": "New Task",
+    "addTask": "Add task",
+    "edit": "Edit",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save changes",
+    "create": "Create task",
+    "clearFilters": "Clear filters",
+    "tryAgain": "Try again",
+    "retrying": "Retrying…",
+    "dismiss": "Dismiss",
+    "refresh": "Refresh data",
+    "viewTasks": "View tasks",
+    "showCompleted": "Show completed",
+    "back": "Back to dashboard",
+    "discard": "Discard",
+    "keepEditing": "Keep editing"
+  },
+  "filter": {
+    "status": "Filter by status",
+    "all": "All",
+    "allAssignees": "All assignees",
+    "allPriorities": "All priorities",
+    "priority": "Priority",
+    "priorityValue": "Priority: {{value}}",
+    "assignee": "Assignee",
+    "assigneeValue": "Assignee: {{name}}"
+  },
+  "status": {
+    "todo": "To Do",
+    "in_progress": "In Progress",
+    "done": "Done"
+  },
+  "priority": {
+    "high": "High",
+    "medium": "Medium",
+    "low": "Low"
+  },
+  "task": {
+    "priorityPrefix": "Priority: ",
+    "assignedTo": "Assigned to ",
+    "moveTo": "Move to",
+    "tags": "Tags",
+    "removeTag": "Remove tag {{tag}}",
+    "actionsFor": "Actions for {{title}}",
+    "statusOf": "Status of {{title}}"
+  },
+  "tasks": {
+    "title": "Tasks",
+    "summary": "{{shown}} of {{total}} tasks",
+    "match": "{{count}} tasks match the filters",
+    "table": "Tasks",
+    "columnTask": "Task",
+    "columnStatus": "Status",
+    "columnPriority": "Priority",
+    "columnDue": "Due",
+    "columnAssignee": "Assignee",
+    "columnActions": "Actions",
+    "loading": "Loading tasks",
+    "page": "Select page of tasks",
+    "countOne": "{{count}} task",
+    "countOther": "{{count}} tasks"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "stats": "Task statistics"
+  },
+  "board": {
+    "hint": "Reorder tasks by dragging them. Keyboard users can open a card's actions menu and choose Move to.",
+    "emptyTitle": "No tasks here",
+    "emptyMessage": "Drag a task here or create a new one.",
+    "loading": "Loading tasks"
+  },
+  "calendar": {
+    "title": "Calendar",
+    "subtitle": "Upcoming work grouped by due date.",
+    "emptyTitle": "Nothing scheduled",
+    "emptyMessage": "There are no upcoming tasks.",
+    "overdue": "Overdue"
+  },
+  "analytics": {
+    "title": "Analytics",
+    "subtitle": "How work is distributed across statuses, priorities and people.",
+    "byStatus": "Tasks by status",
+    "byPriority": "Tasks by priority",
+    "workload": "Open tasks per member",
+    "completedOverall": "{{percent}}% completed overall",
+    "activity": "Recent activity"
+  },
+  "team": {
+    "title": "Team",
+    "membersOne": "{{count}} member",
+    "membersOther": "{{count}} members",
+    "list": "Team members",
+    "completionOf": "{{name}} completion",
+    "complete": "{{percent}}% complete",
+    "empty": "No team members yet"
+  },
+  "settings": {
+    "title": "Settings",
+    "profile": "Profile",
+    "data": "Data",
+    "dataHelp": "API responses are cached for a short time to keep navigation instant. Refresh to fetch the latest data from the server.",
+    "language": "Language",
+    "languageHelp": "Choose the language used throughout the app."
+  },
+  "empty": {
+    "noTasks": "No tasks found",
+    "noTasksHint": "Try adjusting the search or filters.",
+    "noActivity": "No recent activity"
+  },
+  "error": {
+    "generic": "Something went wrong",
+    "tasksLoad": "Tasks could not be loaded",
+    "teamLoad": "Team could not be loaded",
+    "analyticsLoad": "Analytics could not be loaded",
+    "activityLoad": "Activity could not be loaded",
+    "offline": "Unable to reach the server. Check your connection or make sure the mock API is running.",
+    "notFound": "The requested item could not be found.",
+    "conflict": "This item was changed by someone else. Please refresh and try again.",
+    "rejected": "The request was rejected by the server.",
+    "server": "The server encountered an error. Please try again.",
+    "unknown": "Something went wrong. Please try again."
+  },
+  "form": {
+    "newTitle": "New task",
+    "editTitle": "Edit task",
+    "title": "Title",
+    "description": "Description",
+    "status": "Status",
+    "priority": "Priority",
+    "dueDate": "Due date",
+    "assignee": "Assignee",
+    "tags": "Tags",
+    "tagPlaceholder": "Add tag and press Enter",
+    "tagHint": "{{count}}/{{max}} tags",
+    "tagLength": "Tags must be 1–20 characters long.",
+    "field": "This field",
+    "saving": "Saving"
+  },
+  "validation": {
+    "required": "{{label}} is required.",
+    "blank": "{{label}} cannot be blank.",
+    "minlength": "{{label}} must be at least {{requiredLength}} characters.",
+    "maxlength": "{{label}} must be at most {{requiredLength}} characters.",
+    "pattern": "{{label}} contains invalid characters.",
+    "maxItems": "You can add up to {{max}} tags.",
+    "uniqueItems": "Tags must be unique.",
+    "dueDateInPast": "Due date cannot be in the past.",
+    "matDatepickerParse": "Enter a valid date (e.g. 10/31/2026).",
+    "invalid": "{{label}} is invalid."
+  },
+  "dialog": {
+    "deleteTitle": "Delete task?",
+    "deleteMessage": "\"{{title}}\" will be permanently deleted. This action cannot be undone.",
+    "discardTitle": "Discard changes?",
+    "discardMessage": "You have unsaved changes. Are you sure you want to close this form?"
+  },
+  "notify": {
+    "created": "Task \"{{title}}\" created",
+    "updated": "Task \"{{title}}\" updated",
+    "deleted": "Task \"{{title}}\" deleted",
+    "deleteFailed": "Could not delete the task. {{detail}}",
+    "moved": "\"{{title}}\" moved to {{status}}",
+    "moveFailed": "Could not move the task. {{detail}}",
+    "refreshed": "Data refreshed"
+  },
+  "due": {
+    "completed": "Completed",
+    "completedToday": "Completed today",
+    "completedYesterday": "Completed yesterday",
+    "completedDaysAgo": "Completed {{count}} days ago",
+    "overdueOne": "Overdue by {{count}} day",
+    "overdueOther": "Overdue by {{count}} days",
+    "today": "Due today",
+    "tomorrow": "Due tomorrow",
+    "inDays": "Due in {{count}} days",
+    "inWeek": "Due in {{count}} week",
+    "inWeeks": "Due in {{count}} weeks"
+  },
+  "time": {
+    "justNow": "just now",
+    "minutesAgo": "{{count}}m ago",
+    "hoursAgo": "{{count}}h ago",
+    "daysAgo": "{{count}}d ago"
+  },
+  "activity": {
+    "loading": "Loading activity",
+    "created": "created",
+    "updated": "updated",
+    "status_changed": "moved",
+    "completed": "completed",
+    "deleted": "deleted"
+  },
+  "stats": {
+    "total": "Total Tasks",
+    "completed": "Completed",
+    "inProgress": "In Progress",
+    "overdue": "Overdue",
+    "thisWeek": "this week",
+    "today": "today",
+    "sameAsYesterday": "Same as yesterday"
+  },
+  "chart": {
+    "word": "chart"
+  },
+  "paginator": {
+    "itemsPerPage": "Items per page:",
+    "next": "Next page",
+    "previous": "Previous page",
+    "first": "First page",
+    "last": "Last page",
+    "emptyRange": "0 of {{length}}",
+    "range": "{{start}} – {{end}} of {{length}}"
+  },
+  "datepicker": {
+    "calendar": "Calendar",
+    "open": "Open calendar",
+    "close": "Close calendar",
+    "prevMonth": "Previous month",
+    "nextMonth": "Next month",
+    "prevYear": "Previous year",
+    "nextYear": "Next year",
+    "prevMultiYear": "Previous 24 years",
+    "nextMultiYear": "Next 24 years",
+    "switchToMonth": "Choose date",
+    "switchToMultiYear": "Choose month and year",
+    "startDate": "Start date",
+    "endDate": "End date",
+    "comparison": "Comparison range",
+    "yearRange": "{{start}} – {{end}}",
+    "yearRangeLabel": "{{start}} to {{end}}"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "message": "That address does not match a page in this app."
+  }
+}

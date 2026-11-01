@@ -8,6 +8,8 @@ import { MATERIAL_ANIMATIONS } from '@angular/material/core';
 import { vi } from 'vitest';
 import type { AppConfig } from '../core/config/app-config';
 import { APP_CONFIG, NOW } from '../core/config/app-config';
+import { LANGUAGE_STORAGE_KEY } from '../core/i18n/language';
+import { provideI18n } from '../core/i18n/provide-i18n';
 import type { Activity, Assignee, StatisticsResponse, Task } from '../core/models';
 
 /** Fixed "today" used across specs: Wednesday 28 Oct 2026, noon local time. */
@@ -123,7 +125,9 @@ export function mockTaskActions() {
 export function provideTestEnvironment(
   interceptors: HttpInterceptorFn[] = [],
 ): (Provider | EnvironmentProviders)[] {
+  document.cookie = `${LANGUAGE_STORAGE_KEY}=en; Path=/`;
   return [
+    ...provideI18n(),
     provideHttpClient(withInterceptors(interceptors)),
     provideHttpClientTesting(),
     { provide: MATERIAL_ANIMATIONS, useValue: { animationsDisabled: true } },

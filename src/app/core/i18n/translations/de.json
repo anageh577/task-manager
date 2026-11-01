@@ -1,0 +1,271 @@
+{
+  "app": {
+    "name": "Aufgabenmanager",
+    "description": "Aufgabenverwaltung: Planen, verfolgen und erledigen Sie die Arbeit Ihres Teams."
+  },
+  "language": {
+    "label": "Sprache",
+    "english": "English",
+    "german": "Deutsch"
+  },
+  "nav": {
+    "label": "Hauptnavigation",
+    "dashboard": "Übersicht",
+    "tasks": "Aufgaben",
+    "calendar": "Kalender",
+    "analytics": "Auswertungen",
+    "team": "Team",
+    "settings": "Einstellungen"
+  },
+  "shell": {
+    "skip": "Zum Hauptinhalt springen"
+  },
+  "header": {
+    "home": "Startseite von {{name}}",
+    "toggleNav": "Navigation umschalten",
+    "searchLabel": "Aufgaben suchen",
+    "searchPlaceholder": "Aufgaben suchen...",
+    "notifications": "Benachrichtigungen: {{count}} überfällige Aufgaben",
+    "account": "{{avatar}}, Kontomenü für {{name}}",
+    "settings": "Einstellungen"
+  },
+  "action": {
+    "newTask": "Neue Aufgabe",
+    "addTask": "Aufgabe hinzufügen",
+    "edit": "Bearbeiten",
+    "delete": "Löschen",
+    "cancel": "Abbrechen",
+    "confirm": "Bestätigen",
+    "save": "Änderungen speichern",
+    "create": "Aufgabe erstellen",
+    "clearFilters": "Filter zurücksetzen",
+    "tryAgain": "Erneut versuchen",
+    "retrying": "Wird erneut versucht…",
+    "dismiss": "Schließen",
+    "refresh": "Daten aktualisieren",
+    "viewTasks": "Aufgaben anzeigen",
+    "showCompleted": "Erledigte anzeigen",
+    "back": "Zurück zur Übersicht",
+    "discard": "Verwerfen",
+    "keepEditing": "Weiter bearbeiten"
+  },
+  "filter": {
+    "status": "Nach Status filtern",
+    "all": "Alle",
+    "allAssignees": "Alle Bearbeiter",
+    "allPriorities": "Alle Prioritäten",
+    "priority": "Priorität",
+    "priorityValue": "Priorität: {{value}}",
+    "assignee": "Bearbeiter",
+    "assigneeValue": "Bearbeiter: {{name}}"
+  },
+  "status": {
+    "todo": "Zu erledigen",
+    "in_progress": "In Bearbeitung",
+    "done": "Erledigt"
+  },
+  "priority": {
+    "high": "Hoch",
+    "medium": "Mittel",
+    "low": "Niedrig"
+  },
+  "task": {
+    "priorityPrefix": "Priorität: ",
+    "assignedTo": "Zugewiesen an ",
+    "moveTo": "Verschieben nach",
+    "tags": "Schlagwörter",
+    "removeTag": "Schlagwort {{tag}} entfernen",
+    "actionsFor": "Aktionen für {{title}}",
+    "statusOf": "Status von {{title}}"
+  },
+  "tasks": {
+    "title": "Aufgaben",
+    "summary": "{{shown}} von {{total}} Aufgaben",
+    "match": "{{count}} Aufgaben entsprechen den Filtern",
+    "table": "Aufgaben",
+    "columnTask": "Aufgabe",
+    "columnStatus": "Status",
+    "columnPriority": "Priorität",
+    "columnDue": "Fällig",
+    "columnAssignee": "Bearbeiter",
+    "columnActions": "Aktionen",
+    "loading": "Aufgaben werden geladen",
+    "page": "Aufgabenseite auswählen",
+    "countOne": "{{count}} Aufgabe",
+    "countOther": "{{count}} Aufgaben"
+  },
+  "dashboard": {
+    "title": "Übersicht",
+    "stats": "Aufgabenstatistik"
+  },
+  "board": {
+    "hint": "Ordnen Sie Aufgaben durch Ziehen neu. Mit der Tastatur öffnen Sie das Aktionsmenü einer Karte und wählen Verschieben nach.",
+    "emptyTitle": "Keine Aufgaben hier",
+    "emptyMessage": "Ziehen Sie eine Aufgabe hierher oder erstellen Sie eine neue.",
+    "loading": "Aufgaben werden geladen"
+  },
+  "calendar": {
+    "title": "Kalender",
+    "subtitle": "Anstehende Arbeit, gruppiert nach Fälligkeitsdatum.",
+    "emptyTitle": "Nichts geplant",
+    "emptyMessage": "Es gibt keine anstehenden Aufgaben.",
+    "overdue": "Überfällig"
+  },
+  "analytics": {
+    "title": "Auswertungen",
+    "subtitle": "So verteilt sich die Arbeit auf Status, Prioritäten und Personen.",
+    "byStatus": "Aufgaben nach Status",
+    "byPriority": "Aufgaben nach Priorität",
+    "workload": "Offene Aufgaben pro Person",
+    "completedOverall": "{{percent}} % insgesamt abgeschlossen",
+    "activity": "Letzte Aktivitäten"
+  },
+  "team": {
+    "title": "Team",
+    "membersOne": "{{count}} Mitglied",
+    "membersOther": "{{count}} Mitglieder",
+    "list": "Teammitglieder",
+    "completionOf": "Abschluss von {{name}}",
+    "complete": "{{percent}} % abgeschlossen",
+    "empty": "Noch keine Teammitglieder"
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "profile": "Profil",
+    "data": "Daten",
+    "dataHelp": "API-Antworten werden kurz zwischengespeichert, damit die Navigation sofort bleibt. Aktualisieren Sie, um die neuesten Daten vom Server zu laden.",
+    "language": "Sprache",
+    "languageHelp": "Wählen Sie die Sprache für die gesamte Anwendung."
+  },
+  "empty": {
+    "noTasks": "Keine Aufgaben gefunden",
+    "noTasksHint": "Passen Sie die Suche oder die Filter an.",
+    "noActivity": "Keine aktuellen Aktivitäten"
+  },
+  "error": {
+    "generic": "Etwas ist schiefgelaufen",
+    "tasksLoad": "Aufgaben konnten nicht geladen werden",
+    "teamLoad": "Team konnte nicht geladen werden",
+    "analyticsLoad": "Auswertungen konnten nicht geladen werden",
+    "activityLoad": "Aktivitäten konnten nicht geladen werden",
+    "offline": "Der Server ist nicht erreichbar. Prüfen Sie Ihre Verbindung oder ob die Mock-API läuft.",
+    "notFound": "Der angeforderte Eintrag wurde nicht gefunden.",
+    "conflict": "Dieser Eintrag wurde von jemand anderem geändert. Bitte aktualisieren Sie und versuchen Sie es erneut.",
+    "rejected": "Die Anfrage wurde vom Server abgelehnt.",
+    "server": "Auf dem Server ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
+    "unknown": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
+  },
+  "form": {
+    "newTitle": "Neue Aufgabe",
+    "editTitle": "Aufgabe bearbeiten",
+    "title": "Titel",
+    "description": "Beschreibung",
+    "status": "Status",
+    "priority": "Priorität",
+    "dueDate": "Fälligkeitsdatum",
+    "assignee": "Bearbeiter",
+    "tags": "Schlagwörter",
+    "tagPlaceholder": "Schlagwort hinzufügen und Enter drücken",
+    "tagHint": "{{count}}/{{max}} Schlagwörter",
+    "tagLength": "Schlagwörter müssen 1–20 Zeichen lang sein.",
+    "field": "Dieses Feld",
+    "saving": "Wird gespeichert"
+  },
+  "validation": {
+    "required": "{{label}} ist erforderlich.",
+    "blank": "{{label}} darf nicht leer sein.",
+    "minlength": "{{label}} muss mindestens {{requiredLength}} Zeichen lang sein.",
+    "maxlength": "{{label}} darf höchstens {{requiredLength}} Zeichen lang sein.",
+    "pattern": "{{label}} enthält ungültige Zeichen.",
+    "maxItems": "Sie können bis zu {{max}} Schlagwörter hinzufügen.",
+    "uniqueItems": "Schlagwörter müssen eindeutig sein.",
+    "dueDateInPast": "Das Fälligkeitsdatum darf nicht in der Vergangenheit liegen.",
+    "matDatepickerParse": "Geben Sie ein gültiges Datum ein (z. B. 31.10.2026).",
+    "invalid": "{{label}} ist ungültig."
+  },
+  "dialog": {
+    "deleteTitle": "Aufgabe löschen?",
+    "deleteMessage": "„{{title}}“ wird dauerhaft gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.",
+    "discardTitle": "Änderungen verwerfen?",
+    "discardMessage": "Sie haben ungespeicherte Änderungen. Möchten Sie dieses Formular wirklich schließen?"
+  },
+  "notify": {
+    "created": "Aufgabe „{{title}}“ erstellt",
+    "updated": "Aufgabe „{{title}}“ aktualisiert",
+    "deleted": "Aufgabe „{{title}}“ gelöscht",
+    "deleteFailed": "Die Aufgabe konnte nicht gelöscht werden. {{detail}}",
+    "moved": "„{{title}}“ nach {{status}} verschoben",
+    "moveFailed": "Die Aufgabe konnte nicht verschoben werden. {{detail}}",
+    "refreshed": "Daten aktualisiert"
+  },
+  "due": {
+    "completed": "Abgeschlossen",
+    "completedToday": "Heute abgeschlossen",
+    "completedYesterday": "Gestern abgeschlossen",
+    "completedDaysAgo": "Vor {{count}} Tagen abgeschlossen",
+    "overdueOne": "Seit {{count}} Tag überfällig",
+    "overdueOther": "Seit {{count}} Tagen überfällig",
+    "today": "Heute fällig",
+    "tomorrow": "Morgen fällig",
+    "inDays": "Fällig in {{count}} Tagen",
+    "inWeek": "Fällig in {{count}} Woche",
+    "inWeeks": "Fällig in {{count}} Wochen"
+  },
+  "time": {
+    "justNow": "gerade eben",
+    "minutesAgo": "vor {{count}} Min.",
+    "hoursAgo": "vor {{count}} Std.",
+    "daysAgo": "vor {{count}} T."
+  },
+  "activity": {
+    "loading": "Aktivitäten werden geladen",
+    "created": "erstellt",
+    "updated": "aktualisiert",
+    "status_changed": "verschoben",
+    "completed": "abgeschlossen",
+    "deleted": "gelöscht"
+  },
+  "stats": {
+    "total": "Aufgaben insgesamt",
+    "completed": "Erledigt",
+    "inProgress": "In Bearbeitung",
+    "overdue": "Überfällig",
+    "thisWeek": "diese Woche",
+    "today": "heute",
+    "sameAsYesterday": "Wie gestern"
+  },
+  "chart": {
+    "word": "Diagramm"
+  },
+  "paginator": {
+    "itemsPerPage": "Einträge pro Seite:",
+    "next": "Nächste Seite",
+    "previous": "Vorherige Seite",
+    "first": "Erste Seite",
+    "last": "Letzte Seite",
+    "emptyRange": "0 von {{length}}",
+    "range": "{{start}} – {{end}} von {{length}}"
+  },
+  "datepicker": {
+    "calendar": "Kalender",
+    "open": "Kalender öffnen",
+    "close": "Kalender schließen",
+    "prevMonth": "Vorheriger Monat",
+    "nextMonth": "Nächster Monat",
+    "prevYear": "Vorheriges Jahr",
+    "nextYear": "Nächstes Jahr",
+    "prevMultiYear": "Vorherige 24 Jahre",
+    "nextMultiYear": "Nächste 24 Jahre",
+    "switchToMonth": "Datum auswählen",
+    "switchToMultiYear": "Monat und Jahr auswählen",
+    "startDate": "Startdatum",
+    "endDate": "Enddatum",
+    "comparison": "Vergleichszeitraum",
+    "yearRange": "{{start}} – {{end}}",
+    "yearRangeLabel": "{{start}} bis {{end}}"
+  },
+  "notFound": {
+    "title": "Seite nicht gefunden",
+    "message": "Diese Adresse gehört zu keiner Seite in dieser Anwendung."
+  }
+}
