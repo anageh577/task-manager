@@ -1,6 +1,7 @@
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  // Wide enough for the longest status label to stay on one line at 10px.
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr));
   gap: 16px;
   padding: 0;
   margin: 0;
@@ -32,20 +33,24 @@
 
 .counts {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 8px;
   margin: 0;
 
   div {
-    padding: 8px 4px;
+    container-type: inline-size;
+    padding: 8px 2px;
     text-align: center;
     background: var(--tm-surface-muted);
     border-radius: var(--tm-radius-sm);
   }
 
   dt {
-    font-size: 10px;
+    // Longest labels ("In Progress", "In Bearbeitung") must stay on one line.
+    font-size: min(10px, 13.5cqi);
+    line-height: 1.2;
     color: var(--tm-text-muted);
+    white-space: nowrap;
   }
 
   dd {
