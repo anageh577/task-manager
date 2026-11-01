@@ -1,5 +1,6 @@
 import { EnvironmentInjector, inject, Injectable } from '@angular/core';
 import type { MatSnackBarConfig } from '@angular/material/snack-bar';
+import { LanguageService } from '@core/i18n/language.service';
 
 /**
  * Thin wrapper over MatSnackBar so components don't depend on Material directly for toasts.
@@ -8,6 +9,7 @@ import type { MatSnackBarConfig } from '@angular/material/snack-bar';
 @Injectable({ providedIn: 'root' })
 export class NotificationService {
   private readonly injector = inject(EnvironmentInjector);
+  private readonly language = inject(LanguageService);
 
   success(message: string): Promise<void> {
     return this.open(message, {
@@ -27,6 +29,6 @@ export class NotificationService {
 
   private async open(message: string, config: MatSnackBarConfig): Promise<void> {
     const { MatSnackBar } = await import('@angular/material/snack-bar');
-    this.injector.get(MatSnackBar).open(message, 'Dismiss', config);
+    this.injector.get(MatSnackBar).open(message, this.language.text('action.dismiss'), config);
   }
 }

@@ -15,15 +15,17 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import type { PageEvent } from '@angular/material/paginator';
-import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import type { Sort } from '@angular/material/sort';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { map } from 'rxjs';
 import { NOW } from '@core/config/app-config';
+import { LanguageService } from '@core/i18n/language.service';
+import { AppPaginatorIntl } from '@core/i18n/paginator-intl';
 import type { Task, TaskFilters, TaskStatus } from '@core/models';
-import { ALL, STATUS_LABELS, TASK_PRIORITIES, TASK_STATUSES } from '@core/models';
+import { ALL, TASK_PRIORITIES, TASK_STATUSES } from '@core/models';
 import { TaskStore } from '@core/state/task.store';
 import { UserStore } from '@core/state/user.store';
 import { getDueInfo, parseIsoDate } from '@core/utils/date.utils';
@@ -34,6 +36,7 @@ import { ErrorStateComponent } from '@shared/ui/error-state/error-state.componen
 import { PriorityBadgeComponent } from '@shared/ui/priority-badge/priority-badge.component';
 import { SkeletonComponent } from '@shared/ui/skeleton/skeleton.component';
 import { TaskFilterBarComponent } from '@shared/ui/task-filter-bar/task-filter-bar.component';
+import { TranslatePipe } from '@ngx-translate/core';
 
 type SortableColumn = 'title' | 'status' | 'priority' | 'dueDate' | 'assignee';
 
@@ -75,7 +78,9 @@ export function sortTasks(tasks: readonly Task[], sort: Sort): Task[] {
     PriorityBadgeComponent,
     SkeletonComponent,
     TaskFilterBarComponent,
+    TranslatePipe,
   ],
+  providers: [{ provide: MatPaginatorIntl, useClass: AppPaginatorIntl }],
   templateUrl: './tasks.page.html',
   styleUrl: './tasks.page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -84,6 +89,7 @@ export default class TasksPage {
   protected readonly tasks = inject(TaskStore);
   protected readonly users = inject(UserStore);
   protected readonly actions = inject(TaskActionsService);
+  protected readonly language = inject(LanguageService);
   private readonly today = inject(NOW);
 
   /**
@@ -100,10 +106,7 @@ export default class TasksPage {
   );
 
   protected readonly pageSizeOptions = [5, 10, 25];
-  protected readonly statusOptions = TASK_STATUSES.map((value) => ({
-    value,
-    label: STATUS_LABELS[value],
-  }));
+  protected readonly statusOptions = TASK_STATUSES;
   protected readonly trackById = (_: number, task: Task): string => task.id;
 
   protected readonly sort = signal<Sort>({ active: 'dueDate', direction: 'asc' });

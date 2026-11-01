@@ -4,9 +4,16 @@ const MS_PER_DAY = 86_400_000;
 
 export type DueTone = 'overdue' | 'upcoming' | 'completed';
 
+export interface MessageDescriptor {
+  key: string;
+  params?: Record<string, number>;
+}
+
 export interface DueInfo {
   icon: string;
-  label: string;
+  /** Translation key rendered by the template (`due.today`, `due.overdueOther`, …). */
+  labelKey: string;
+  labelParams?: Record<string, number>;
   tone: DueTone;
 }
 
@@ -38,10 +45,6 @@ export function isOverdue(task: Pick<Task, 'status' | 'dueDate'>, today = new Da
   return task.status !== 'done' && calendarDaysBetween(today, parseIsoDate(task.dueDate)) < 0;
 }
 
-function plural(count: number, unit: string): string {
-  return `${count} ${unit}${count === 1 ? '' : 's'}`;
-}
-
 /** Builds the due-date line shown on task cards ("Overdue by 2 days", "Due in 3 days", "Completed today"). */
 export function getDueInfo(
   task: Pick<Task, 'status' | 'dueDate' | 'completedAt'>,
@@ -51,39 +54,58 @@ export function getDueInfo(
     const completedDaysAgo = task.completedAt
       ? calendarDaysBetween(new Date(task.completedAt), today)
       : null;
-    const label =
-      completedDaysAgo === null
-        ? 'Completed'
-        : completedDaysAgo <= 0
-          ? 'Completed today'
-          : completedDaysAgo === 1
-            ? 'Completed yesterday'
-            : `Completed ${plural(completedDaysAgo, 'day')} ago`;
-    return { icon: '✅', label, tone: 'completed' };
+    if (completedDaysAgo === null)
+      return { icon: '✅', labelKey: 'due.completed', tone: 'completed' };
+    if (completedDaysAgo <= 0) {
+      return { icon: '✅', labelKey: 'due.completedToday', tone: 'completed' };
+    }
+    if (completedDaysAgo === 1) {
+      return { icon: '✅', labelKey: 'due.completedYesterday', tone: 'completed' };
+    }
+    return {
+      icon: '✅',
+      labelKey: 'due.completedDaysAgo',
+      labelParams: { count: completedDaysAgo },
+      tone: 'completed',
+    };
   }
 
   const daysLeft = calendarDaysBetween(today, parseIsoDate(task.dueDate));
   if (daysLeft < 0) {
-    return { icon: '⚠️', label: `Overdue by ${plural(-daysLeft, 'day')}`, tone: 'overdue' };
+    const count = -daysLeft;
+    return {
+      icon: '⚠️',
+      labelKey: count === 1 ? 'due.overdueOne' : 'due.overdueOther',
+      labelParams: { count },
+      tone: 'overdue',
+    };
   }
-  const label =
-    daysLeft === 0
-      ? 'Due today'
-      : daysLeft === 1
-        ? 'Due tomorrow'
-        : daysLeft < 7
-          ? `Due in ${plural(daysLeft, 'day')}`
-          : `Due in ${plural(Math.floor(daysLeft / 7), 'week')}`;
-  return { icon: '📅', label, tone: 'upcoming' };
+  if (daysLeft === 0) return { icon: '📅', labelKey: 'due.today', tone: 'upcoming' };
+  if (daysLeft === 1) return { icon: '📅', labelKey: 'due.tomorrow', tone: 'upcoming' };
+  if (daysLeft < 7) {
+    return {
+      icon: '📅',
+      labelKey: 'due.inDays',
+      labelParams: { count: daysLeft },
+      tone: 'upcoming',
+    };
+  }
+  const weeks = Math.floor(daysLeft / 7);
+  return {
+    icon: '📅',
+    labelKey: weeks === 1 ? 'due.inWeek' : 'due.inWeeks',
+    labelParams: { count: weeks },
+    tone: 'upcoming',
+  };
 }
 
 /** Compact relative time for the activity feed ("just now", "5m ago", "3h ago", "2d ago"). */
-export function relativeTime(timestamp: string, now = new Date()): string {
+export function relativeTime(timestamp: string, now = new Date()): MessageDescriptor {
   const seconds = Math.max(0, Math.floor((now.getTime() - new Date(timestamp).getTime()) / 1000));
-  if (seconds < 60) return 'just now';
+  if (seconds < 60) return { key: 'time.justNow' };
   const minutes = Math.floor(seconds / 60);
-  if (minutes < 60) return `${minutes}m ago`;
+  if (minutes < 60) return { key: 'time.minutesAgo', params: { count: minutes } };
   const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `${hours}h ago`;
-  return `${Math.floor(hours / 24)}d ago`;
+  if (hours < 24) return { key: 'time.hoursAgo', params: { count: hours } };
+  return { key: 'time.daysAgo', params: { count: Math.floor(hours / 24) } };
 }

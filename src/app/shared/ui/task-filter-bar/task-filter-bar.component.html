@@ -1,4 +1,4 @@
-<div class="tabs" role="group" aria-label="Filter by status">
+<div class="tabs" role="group" [attr.aria-label]="'filter.status' | translate">
   @for (tab of statusTabs; track tab.value) {
     <button
       type="button"
@@ -7,7 +7,7 @@
       [attr.aria-pressed]="filters().status === tab.value"
       (click)="setStatus(tab.value)"
     >
-      {{ tab.label }}
+      {{ (tab.value === all ? 'filter.all' : 'status.' + tab.value) | translate }}
     </button>
   }
 </div>
@@ -15,7 +15,7 @@
 <div class="actions">
   @if (hasActiveFilters()) {
     <button mat-button type="button" class="clear" (click)="resetFilters.emit()">
-      Clear filters
+      {{ 'action.clearFilters' | translate }}
     </button>
   }
 
@@ -36,7 +36,7 @@
       [attr.aria-checked]="filters().assigneeId === all"
       (click)="setAssignee(all)"
     >
-      All assignees
+      {{ 'filter.allAssignees' | translate }}
     </button>
     @for (user of users(); track user.id) {
       <button
@@ -68,22 +68,22 @@
       [attr.aria-checked]="filters().priority === all"
       (click)="setPriority(all)"
     >
-      All priorities
+      {{ 'filter.allPriorities' | translate }}
     </button>
-    @for (priority of priorities; track priority.value) {
+    @for (priority of priorities; track priority) {
       <button
         mat-menu-item
         type="button"
         role="menuitemradio"
-        [attr.aria-checked]="filters().priority === priority.value"
-        (click)="setPriority(priority.value)"
+        [attr.aria-checked]="filters().priority === priority"
+        (click)="setPriority(priority)"
       >
-        {{ priority.label }}
+        {{ 'priority.' + priority | translate }}
       </button>
     }
   </mat-menu>
 
   <button mat-flat-button type="button" class="new-task" (click)="newTask.emit()">
-    + New Task
+    + {{ 'action.newTask' | translate }}
   </button>
 </div>

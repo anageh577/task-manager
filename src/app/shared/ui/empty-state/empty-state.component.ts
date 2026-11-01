@@ -1,12 +1,14 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-empty-state',
+  imports: [TranslatePipe],
   template: `
     <span class="icon" aria-hidden="true">{{ icon() }}</span>
-    <p class="title">{{ title() }}</p>
+    <p class="title">{{ title() | translate }}</p>
     @if (message()) {
-      <p class="message">{{ message() }}</p>
+      <p class="message">{{ message() | translate }}</p>
     }
     <ng-content />
   `,

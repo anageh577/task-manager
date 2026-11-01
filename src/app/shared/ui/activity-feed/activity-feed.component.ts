@@ -1,23 +1,31 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import type { Activity, ActivityType } from '@core/models';
+import { ActivityDetailPipe } from '@core/i18n/activity-detail.pipe';
 import { RelativeTimePipe } from '@shared/pipes/relative-time.pipe';
+import { TranslatePipe } from '@ngx-translate/core';
 import { EmptyStateComponent } from '../empty-state/empty-state.component';
 import { SkeletonComponent } from '../skeleton/skeleton.component';
 
-const ACTIVITY_META: Record<ActivityType, { icon: string; verb: string }> = {
-  created: { icon: '🆕', verb: 'created' },
-  updated: { icon: '✏️', verb: 'updated' },
-  status_changed: { icon: '🔀', verb: 'moved' },
-  completed: { icon: '✅', verb: 'completed' },
-  deleted: { icon: '🗑️', verb: 'deleted' },
+const ACTIVITY_META: Record<ActivityType, { icon: string; verbKey: string }> = {
+  created: { icon: '🆕', verbKey: 'activity.created' },
+  updated: { icon: '✏️', verbKey: 'activity.updated' },
+  status_changed: { icon: '🔀', verbKey: 'activity.status_changed' },
+  completed: { icon: '✅', verbKey: 'activity.completed' },
+  deleted: { icon: '🗑️', verbKey: 'activity.deleted' },
 };
 
 @Component({
   selector: 'app-activity-feed',
-  imports: [EmptyStateComponent, RelativeTimePipe, SkeletonComponent],
+  imports: [
+    EmptyStateComponent,
+    RelativeTimePipe,
+    SkeletonComponent,
+    TranslatePipe,
+    ActivityDetailPipe,
+  ],
   template: `
     @if (loading()) {
-      <div class="skeleton" aria-busy="true" aria-label="Loading activity">
+      <div class="skeleton" aria-busy="true" [attr.aria-label]="'activity.loading' | translate">
         @for (i of [1, 2, 3, 4]; track i) {
           <app-skeleton height="34px" />
         }
@@ -29,10 +37,10 @@ const ACTIVITY_META: Record<ActivityType, { icon: string; verb: string }> = {
             <span class="icon" aria-hidden="true">{{ meta[activity.type].icon }}</span>
             <div class="text">
               <p>
-                <strong>{{ activity.actor }}</strong> {{ meta[activity.type].verb }}
+                <strong>{{ activity.actor }}</strong> {{ meta[activity.type].verbKey | translate }}
                 <span class="task">“{{ activity.taskTitle }}”</span>
                 @if (activity.detail) {
-                  <span class="detail">({{ activity.detail }})</span>
+                  <span class="detail">({{ activity.detail | activityDetail }})</span>
                 }
               </p>
               <time [attr.datetime]="activity.timestamp">{{
@@ -41,7 +49,7 @@ const ACTIVITY_META: Record<ActivityType, { icon: string; verb: string }> = {
             </div>
           </li>
         } @empty {
-          <app-empty-state icon="🕒" title="No recent activity" />
+          <app-empty-state icon="🕒" title="empty.noActivity" />
         }
       </ol>
     }

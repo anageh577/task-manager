@@ -12,6 +12,7 @@ import {
   viewChild,
 } from '@angular/core';
 import type { ChartConfiguration, ChartData } from 'chart.js';
+import { LanguageService } from '@core/i18n/language.service';
 import type { ChartInstance } from './chart-loader';
 import { CHART_LOADER } from './chart-loader';
 
@@ -57,12 +58,13 @@ export class ChartComponent {
   readonly height = input(240);
 
   private readonly loadChart = inject(CHART_LOADER);
+  private readonly language = inject(LanguageService);
   private readonly canvas = viewChild.required<ElementRef<HTMLCanvasElement>>('canvas');
   private readonly chart = signal<ChartInstance | null>(null);
 
   protected readonly ariaLabel = computed(
     () =>
-      `${this.datasetLabel()} chart: ` +
+      `${this.datasetLabel()} ${this.language.text('chart.word')}: ` +
       this.labels()
         .map((label, i) => `${label} ${this.values()[i] ?? 0}`)
         .join(', '),

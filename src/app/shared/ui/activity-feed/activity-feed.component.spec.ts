@@ -1,6 +1,6 @@
 import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
-import { makeActivity, TODAY } from '../../../testing/fixtures';
+import { makeActivity, provideTestEnvironment, TODAY } from '../../../testing/fixtures';
 import { ActivityFeedComponent } from './activity-feed.component';
 
 describe('ActivityFeedComponent', () => {
@@ -8,6 +8,7 @@ describe('ActivityFeedComponent', () => {
   let element: HTMLElement;
 
   beforeEach(() => {
+    TestBed.configureTestingModule({ providers: provideTestEnvironment() });
     fixture = TestBed.createComponent(ActivityFeedComponent);
     fixture.componentRef.setInput('now', TODAY);
     element = fixture.nativeElement;

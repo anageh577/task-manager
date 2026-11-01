@@ -1,17 +1,19 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { LocalizeMessagePipe } from '@core/i18n/localize-message.pipe';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-error-state',
-  imports: [MatButtonModule],
+  imports: [MatButtonModule, TranslatePipe, LocalizeMessagePipe],
   template: `
     <span class="icon" aria-hidden="true">⚠️</span>
     <div class="body">
-      <p class="title">{{ title() }}</p>
-      <p class="message">{{ message() }}</p>
+      <p class="title">{{ title() | translate }}</p>
+      <p class="message">{{ message() | localizeMessage }}</p>
     </div>
     <button mat-stroked-button type="button" (click)="retry.emit()" [disabled]="retrying()">
-      {{ retrying() ? 'Retrying…' : 'Try again' }}
+      {{ (retrying() ? 'action.retrying' : 'action.tryAgain') | translate }}
     </button>
   `,
   styles: `
@@ -43,7 +45,7 @@ import { MatButtonModule } from '@angular/material/button';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ErrorStateComponent {
-  readonly title = input('Something went wrong');
+  readonly title = input('error.generic');
   readonly message = input.required<string>();
   readonly retrying = input(false);
   readonly retry = output<void>();

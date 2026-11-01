@@ -5,7 +5,7 @@
     type="button"
     class="menu-trigger"
     [matMenuTriggerFor]="actions"
-    [attr.aria-label]="'Actions for ' + task().title"
+    [attr.aria-label]="'task.actionsFor' | translate: { title: task().title }"
   >
     <span aria-hidden="true">⋮</span>
   </button>
@@ -20,11 +20,11 @@
   <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" focusable="false">
     <path fill="currentColor" [attr.d]="dueIcon()" />
   </svg>
-  {{ due().label }}
+  {{ due().labelKey | translate: due().labelParams }}
 </p>
 
 @if (task().tags.length) {
-  <ul class="tags" aria-label="Tags">
+  <ul class="tags" [attr.aria-label]="'task.tags' | translate">
     @for (tag of task().tags; track tag) {
       <li>{{ tag }}</li>
     }
@@ -34,24 +34,26 @@
 <div class="footer">
   <app-avatar [name]="task().assignee.name" [initials]="task().assignee.avatar" [size]="22" />
   <span class="assignee">
-    <span class="visually-hidden">Assigned to </span>{{ assigneeHandle() }}
+    <span class="visually-hidden">{{ 'task.assignedTo' | translate }}</span
+    >{{ assigneeHandle() }}
   </span>
 </div>
 
 <mat-menu #actions="matMenu" xPosition="before">
   <button mat-menu-item type="button" (click)="edit.emit(task())">
-    <span aria-hidden="true">✏️</span> Edit
+    <span aria-hidden="true">✏️</span> {{ 'action.edit' | translate }}
   </button>
-  @for (target of moveTargets(); track target.status) {
+  @for (target of moveTargets(); track target) {
     <button
       mat-menu-item
       type="button"
-      (click)="statusChange.emit({ task: task(), status: target.status })"
+      (click)="statusChange.emit({ task: task(), status: target })"
     >
-      <span aria-hidden="true">➡️</span> Move to {{ target.label }}
+      <span aria-hidden="true">➡️</span>
+      {{ 'task.moveTo' | translate }} {{ 'status.' + target | translate }}
     </button>
   }
   <button mat-menu-item type="button" class="danger" (click)="delete.emit(task())">
-    <span aria-hidden="true">🗑️</span> Delete
+    <span aria-hidden="true">🗑️</span> {{ 'action.delete' | translate }}
   </button>
 </mat-menu>

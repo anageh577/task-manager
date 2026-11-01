@@ -1,5 +1,5 @@
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   FormControl,
@@ -10,14 +10,14 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import type { MatChipInputEvent } from '@angular/material/chips';
 import { MatChipsModule } from '@angular/material/chips';
-import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDatepickerIntl, MatDatepickerModule } from '@angular/material/datepicker';
 import {
   MatDialog,
   MAT_DIALOG_DATA,
   MatDialogModule,
   MatDialogRef,
 } from '@angular/material/dialog';
-import { provideNativeDateAdapter } from '@angular/material/core';
+import { DateAdapter, provideNativeDateAdapter } from '@angular/material/core';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -25,8 +25,10 @@ import { MatSelectModule } from '@angular/material/select';
 import { filter, firstValueFrom, merge } from 'rxjs';
 import { NOW } from '@core/config/app-config';
 import { errorMessage } from '@core/http/api-error';
+import { AppDatepickerIntl } from '@core/i18n/datepicker-intl';
+import { LanguageService } from '@core/i18n/language.service';
 import type { Task, TaskDraft, TaskPriority, TaskStatus } from '@core/models';
-import { PRIORITY_LABELS, STATUS_LABELS, TASK_PRIORITIES, TASK_STATUSES } from '@core/models';
+import { TASK_PRIORITIES, TASK_STATUSES } from '@core/models';
 import { UserStore } from '@core/state/user.store';
 import { parseIsoDate, toIsoDate } from '@core/utils/date.utils';
 import { CrossFieldErrorStateMatcher } from '@shared/forms/cross-field-error-state-matcher';
@@ -39,6 +41,8 @@ import {
 } from '@shared/forms/validators';
 import type { ConfirmDialogData } from '../confirm-dialog/confirm-dialog.component';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { LocalizeMessagePipe } from '@core/i18n/localize-message.pipe';
+import { TranslatePipe } from '@ngx-translate/core';
 
 export const MAX_TAGS = 5;
 export const MAX_TAG_LENGTH = 20;
@@ -73,6 +77,8 @@ export interface TaskFormDialogData {
     MatProgressSpinnerModule,
     MatSelectModule,
     ValidationMessagePipe,
+    TranslatePipe,
+    LocalizeMessagePipe,
   ],
   templateUrl: './task-form-dialog.component.html',
   styleUrl: './task-form-dialog.component.scss',
@@ -83,6 +89,7 @@ export interface TaskFormDialogData {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
       useValue: { appearance: 'outline', subscriptSizing: 'dynamic' },
     },
+    { provide: MatDatepickerIntl, useClass: AppDatepickerIntl },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -92,6 +99,8 @@ export class TaskFormDialogComponent {
   private readonly dialog = inject(MatDialog);
   private readonly fb = inject(NonNullableFormBuilder);
   private readonly now = inject(NOW);
+  private readonly language = inject(LanguageService);
+  private readonly dateAdapter = inject(DateAdapter);
   protected readonly users = inject(UserStore).users;
 
   protected readonly isEdit = !!this.data.task;
@@ -99,19 +108,14 @@ export class TaskFormDialogComponent {
   protected readonly submitError = signal<string | null>(null);
   protected readonly separatorKeys = [ENTER, COMMA] as const;
   protected readonly dueDateMatcher = new CrossFieldErrorStateMatcher('dueDateInPast');
-  protected readonly statusOptions = TASK_STATUSES.map((value) => ({
-    value,
-    label: STATUS_LABELS[value],
-  }));
-  protected readonly priorityOptions = TASK_PRIORITIES.map((value) => ({
-    value,
-    label: PRIORITY_LABELS[value],
-  }));
+  protected readonly statusOptions = TASK_STATUSES;
+  protected readonly priorityOptions = TASK_PRIORITIES;
   protected readonly maxTags = MAX_TAGS;
 
   readonly form = this.buildForm(this.data.task);
 
   constructor() {
+    effect(() => this.dateAdapter.setLocale(this.language.dateLocale()));
     // Backdrop clicks and Escape go through the dirty-check instead of closing immediately.
     this.dialogRef.disableClose = true;
     merge(
@@ -175,10 +179,10 @@ export class TaskFormDialogComponent {
       this.dialog
         .open<ConfirmDialogComponent, ConfirmDialogData, boolean>(ConfirmDialogComponent, {
           data: {
-            title: 'Discard changes?',
-            message: 'You have unsaved changes. Are you sure you want to close this form?',
-            confirmLabel: 'Discard',
-            cancelLabel: 'Keep editing',
+            title: this.language.text('dialog.discardTitle'),
+            message: this.language.text('dialog.discardMessage'),
+            confirmLabel: this.language.text('action.discard'),
+            cancelLabel: this.language.text('action.keepEditing'),
             destructive: true,
           },
           width: '400px',

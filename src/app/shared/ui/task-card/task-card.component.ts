@@ -2,7 +2,8 @@ import { ChangeDetectionStrategy, Component, computed, input, output } from '@an
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import type { Task, TaskStatus } from '@core/models';
-import { STATUS_LABELS, TASK_STATUSES } from '@core/models';
+import { TASK_STATUSES } from '@core/models';
+import { TranslatePipe } from '@ngx-translate/core';
 import { getDueInfo, type DueTone } from '@core/utils/date.utils';
 
 /** Decorative due-date glyphs. Inline so they inherit `currentColor` from the tone. */
@@ -26,7 +27,7 @@ export interface TaskStatusChange {
 /** Presentational task card (board item). Emits user intents; owns no state. */
 @Component({
   selector: 'app-task-card',
-  imports: [MatButtonModule, MatMenuModule, AvatarComponent, PriorityBadgeComponent],
+  imports: [MatButtonModule, MatMenuModule, AvatarComponent, PriorityBadgeComponent, TranslatePipe],
   templateUrl: './task-card.component.html',
   styleUrl: './task-card.component.scss',
   host: {
@@ -51,9 +52,6 @@ export class TaskCardComponent {
   });
   protected readonly titleId = computed(() => `task-title-${this.task().id}`);
   protected readonly moveTargets = computed(() =>
-    TASK_STATUSES.filter((status) => status !== this.task().status).map((status) => ({
-      status,
-      label: STATUS_LABELS[status],
-    })),
+    TASK_STATUSES.filter((status) => status !== this.task().status),
   );
 }

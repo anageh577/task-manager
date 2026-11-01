@@ -1,10 +1,13 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
+import { LanguageService } from '@core/i18n/language.service';
 import type { TaskPriority } from '@core/models';
-import { PRIORITY_LABELS } from '@core/models';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-priority-badge',
-  template: `<span class="sr-only">Priority: </span>{{ label() }}`,
+  imports: [TranslatePipe],
+  template: `<span class="sr-only">{{ 'task.priorityPrefix' | translate }}</span
+    >{{ label() }}`,
   styles: `
     .sr-only {
       position: absolute;
@@ -46,6 +49,7 @@ import { PRIORITY_LABELS } from '@core/models';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PriorityBadgeComponent {
+  private readonly language = inject(LanguageService);
   readonly priority = input.required<TaskPriority>();
-  protected readonly label = computed(() => PRIORITY_LABELS[this.priority()]);
+  protected readonly label = computed(() => this.language.text(`priority.${this.priority()}`));
 }

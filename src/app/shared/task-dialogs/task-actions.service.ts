@@ -2,8 +2,9 @@ import { EnvironmentInjector, inject, Injectable } from '@angular/core';
 import type { MatDialog } from '@angular/material/dialog';
 import { firstValueFrom } from 'rxjs';
 import { errorMessage } from '@core/http/api-error';
+import { LanguageService } from '@core/i18n/language.service';
+import { translationKeyForMessage } from '@core/i18n/localize-message';
 import type { Task, TaskStatus } from '@core/models';
-import { STATUS_LABELS } from '@core/models';
 import { NotificationService } from '@core/services/notification.service';
 import { TaskStore } from '@core/state/task.store';
 import type { ConfirmDialogData } from './confirm-dialog/confirm-dialog.component';
@@ -27,6 +28,7 @@ export class TaskActionsService {
   private readonly injector = inject(EnvironmentInjector);
   private readonly store = inject(TaskStore);
   private readonly notify = inject(NotificationService);
+  private readonly language = inject(LanguageService);
 
   private async dialog(): Promise<MatDialog> {
     const { MatDialog } = await import('@angular/material/dialog');
@@ -42,7 +44,7 @@ export class TaskActionsService {
       initialStatus,
       save: async (draft) => {
         const task = await this.store.create(draft);
-        this.notify.success(`Task "${task.title}" created`);
+        this.notify.success(this.language.text('notify.created', { title: task.title }));
       },
     };
     const ref = dialog.open<unknown, TaskFormDialogData, boolean>(TaskFormDialogComponent, {
@@ -61,7 +63,7 @@ export class TaskActionsService {
       task,
       save: async (draft) => {
         await this.store.update(task.id, draft);
-        this.notify.success(`Task "${draft.title}" updated`);
+        this.notify.success(this.language.text('notify.updated', { title: draft.title }));
       },
     };
     const ref = dialog.open<unknown, TaskFormDialogData, boolean>(TaskFormDialogComponent, {
@@ -80,9 +82,9 @@ export class TaskActionsService {
       width: '420px',
       maxWidth: '96vw',
       data: {
-        title: 'Delete task?',
-        message: `"${task.title}" will be permanently deleted. This action cannot be undone.`,
-        confirmLabel: 'Delete',
+        title: this.language.text('dialog.deleteTitle'),
+        message: this.language.text('dialog.deleteMessage', { title: task.title }),
+        confirmLabel: this.language.text('action.delete'),
         destructive: true,
       },
     });
@@ -90,10 +92,10 @@ export class TaskActionsService {
 
     try {
       await this.store.remove(task.id);
-      this.notify.success(`Task "${task.title}" deleted`);
+      this.notify.success(this.language.text('notify.deleted', { title: task.title }));
       return true;
     } catch (error) {
-      this.notify.error(`Could not delete the task. ${errorMessage(error)}`);
+      this.notify.error(this.language.text('notify.deleteFailed', { detail: this.detail(error) }));
       return false;
     }
   }
@@ -107,10 +109,21 @@ export class TaskActionsService {
     try {
       await this.store.move(task.id, status, index);
       if (task.status !== status) {
-        this.notify.success(`"${task.title}" moved to ${STATUS_LABELS[status]}`);
+        this.notify.success(
+          this.language.text('notify.moved', {
+            title: task.title,
+            status: this.language.text(`status.${status}`),
+          }),
+        );
       }
     } catch (error) {
-      this.notify.error(`Could not move the task. ${errorMessage(error)}`);
+      this.notify.error(this.language.text('notify.moveFailed', { detail: this.detail(error) }));
     }
+  }
+
+  private detail(error: unknown): string {
+    const message = errorMessage(error);
+    const key = translationKeyForMessage(message);
+    return key ? this.language.text(key) : message;
   }
 }

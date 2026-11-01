@@ -1,8 +1,13 @@
 <div class="tm-page">
   <header class="tm-page-header">
     <div>
-      <h1>Tasks</h1>
-      <p>{{ tasks.filteredTasks().length }} of {{ tasks.tasks().length }} tasks</p>
+      <h1>{{ 'tasks.title' | translate }}</h1>
+      <p>
+        {{
+          'tasks.summary'
+            | translate: { shown: tasks.filteredTasks().length, total: tasks.tasks().length }
+        }}
+      </p>
     </div>
   </header>
 
@@ -17,7 +22,7 @@
 
   @if (loadError(); as error) {
     <app-error-state
-      title="Tasks could not be loaded"
+      title="error.tasksLoad"
       [message]="error"
       [retrying]="tasks.isLoading()"
       (retry)="tasks.reload()"
@@ -25,24 +30,22 @@
   } @else {
     <p class="visually-hidden" aria-live="polite">
       @if (tasks.hasActiveFilters()) {
-        {{ tasks.filteredTasks().length }} tasks match the filters
+        {{ 'tasks.match' | translate: { count: tasks.filteredTasks().length } }}
       }
     </p>
     <div class="table-wrapper tm-panel">
       @if (tasks.isInitialLoad()) {
-        <div class="skeleton" aria-busy="true" aria-label="Loading tasks">
+        <div class="skeleton" aria-busy="true" [attr.aria-label]="'tasks.loading' | translate">
           @for (row of skeletonRows; track row) {
             <app-skeleton height="36px" />
           }
         </div>
       } @else if (!sorted().length) {
-        <app-empty-state
-          icon="🔍"
-          title="No tasks found"
-          message="Try adjusting the search or filters."
-        >
+        <app-empty-state icon="🔍" title="empty.noTasks" message="empty.noTasksHint">
           @if (tasks.hasActiveFilters()) {
-            <button mat-button type="button" (click)="tasks.resetFilters()">Clear filters</button>
+            <button mat-button type="button" (click)="tasks.resetFilters()">
+              {{ 'action.clearFilters' | translate }}
+            </button>
           }
         </app-empty-state>
       } @else {
@@ -54,10 +57,12 @@
           [matSortActive]="sort().active"
           [matSortDirection]="sort().direction"
           (matSortChange)="sort.set($event)"
-          aria-label="Tasks"
+          [attr.aria-label]="'tasks.table' | translate"
         >
           <ng-container matColumnDef="title">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Task</th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              {{ 'tasks.columnTask' | translate }}
+            </th>
             <td mat-cell *matCellDef="let task">
               <span class="task-title">{{ task.title }}</span>
               <span class="task-description">{{ task.description }}</span>
@@ -65,39 +70,51 @@
           </ng-container>
 
           <ng-container matColumnDef="status">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              {{ 'tasks.columnStatus' | translate }}
+            </th>
             <td mat-cell *matCellDef="let task">
               <mat-select
                 class="status-select"
                 [value]="task.status"
-                [attr.aria-label]="'Status of ' + task.title"
+                [attr.aria-label]="'task.statusOf' | translate: { title: task.title }"
                 panelWidth=""
                 (selectionChange)="onStatusSelect(task, $event.value)"
               >
-                @for (option of statusOptions; track option.value) {
-                  <mat-option [value]="option.value">{{ option.label }}</mat-option>
+                @for (option of statusOptions; track option) {
+                  <mat-option [value]="option">{{ 'status.' + option | translate }}</mat-option>
                 }
               </mat-select>
             </td>
           </ng-container>
 
           <ng-container matColumnDef="priority">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Priority</th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              {{ 'tasks.columnPriority' | translate }}
+            </th>
             <td mat-cell *matCellDef="let task">
               <app-priority-badge [priority]="task.priority" />
             </td>
           </ng-container>
 
           <ng-container matColumnDef="dueDate">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Due</th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              {{ 'tasks.columnDue' | translate }}
+            </th>
             <td mat-cell *matCellDef="let task">
-              <span class="due">{{ dueDate(task) | date: 'mediumDate' }}</span>
-              <span class="due-label" [class]="dueInfo(task).tone">{{ dueInfo(task).label }}</span>
+              <span class="due">{{
+                dueDate(task) | date: 'mediumDate' : undefined : language.dateLocale()
+              }}</span>
+              <span class="due-label" [class]="dueInfo(task).tone">{{
+                dueInfo(task).labelKey | translate: dueInfo(task).labelParams
+              }}</span>
             </td>
           </ng-container>
 
           <ng-container matColumnDef="assignee">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Assignee</th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              {{ 'tasks.columnAssignee' | translate }}
+            </th>
             <td mat-cell *matCellDef="let task">
               <span class="assignee">
                 <app-avatar [name]="task.assignee.name" [initials]="task.assignee.avatar" />
@@ -107,14 +124,16 @@
           </ng-container>
 
           <ng-container matColumnDef="actions">
-            <th mat-header-cell *matHeaderCellDef><span class="visually-hidden">Actions</span></th>
+            <th mat-header-cell *matHeaderCellDef>
+              <span class="visually-hidden">{{ 'tasks.columnActions' | translate }}</span>
+            </th>
             <td mat-cell *matCellDef="let task" class="actions-cell">
               <button
                 mat-icon-button
                 type="button"
                 [matMenuTriggerFor]="rowMenu"
                 [matMenuTriggerData]="{ task }"
-                [attr.aria-label]="'Actions for ' + task.title"
+                [attr.aria-label]="'task.actionsFor' | translate: { title: task.title }"
               >
                 <span aria-hidden="true">⋮</span>
               </button>
@@ -135,7 +154,7 @@
           [pageSize]="pageSize()"
           [pageSizeOptions]="pageSizeOptions"
           (page)="onPage($event)"
-          aria-label="Select page of tasks"
+          [attr.aria-label]="'tasks.page' | translate"
         />
       }
     </div>
@@ -144,7 +163,11 @@
 
 <mat-menu #rowMenu="matMenu" xPosition="before">
   <ng-template matMenuContent let-task="task">
-    <button mat-menu-item type="button" (click)="actions.openEdit(task)">✏️ Edit</button>
-    <button mat-menu-item type="button" (click)="actions.confirmDelete(task)">🗑️ Delete</button>
+    <button mat-menu-item type="button" (click)="actions.openEdit(task)">
+      ✏️ {{ 'action.edit' | translate }}
+    </button>
+    <button mat-menu-item type="button" (click)="actions.confirmDelete(task)">
+      🗑️ {{ 'action.delete' | translate }}
+    </button>
   </ng-template>
 </mat-menu>
