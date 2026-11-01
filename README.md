@@ -13,6 +13,7 @@ The rest of this file explains what the product does, why it is built this way, 
 | App           | Angular 21 standalone components, signals, and `httpResource`          |
 | Language      | TypeScript 5.9, RxJS 7                                                 |
 | UI            | Angular Material and Angular CDK                                       |
+| Languages     | ngx-translate. English is the default; German switches at runtime      |
 | Charts        | Chart.js 4                                                             |
 | API (local)   | json-server on port 3000, seeded from `data-generator/`                |
 | API (hosting) | Firebase Realtime Database REST, selected by `environment.firebase.ts` |
@@ -55,15 +56,15 @@ The app is at [http://localhost:8080](http://localhost:8080). The API is at [htt
 
 ## Features
 
-| Area      | What the user can do                                                                                    | Where it lives                |
-| --------- | ------------------------------------------------------------------------------------------------------- | ----------------------------- |
-| Dashboard | See four statistic cards, filter the board, drag tasks between columns, or move them from the card menu | `src/app/features/dashboard/` |
-| Tasks     | Sort, page, and edit status in a table. On a narrow screen the table keeps title, status, and actions   | `src/app/features/tasks/`     |
-| Calendar  | Browse an agenda grouped by due date, with an Overdue bucket and a “Show completed” toggle              | `src/app/features/calendar/`  |
-| Analytics | Read status, priority, and workload charts, plus the activity feed                                      | `src/app/features/analytics/` |
-| Team      | See each person’s open, done, and overdue counts, then open their tasks                                 | `src/app/features/team/`      |
-| Settings  | See the current profile and refresh cached data                                                         | `src/app/features/settings/`  |
-| Shell     | Search, open the overdue agenda, create a task, and navigate. Below 960px the sidebar becomes a drawer  | `src/app/layout/`             |
+| Area      | What the user can do                                                                                                    | Where it lives                |
+| --------- | ----------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
+| Dashboard | See four statistic cards, filter the board, drag tasks between columns, or move them from the card menu                 | `src/app/features/dashboard/` |
+| Tasks     | Sort, page, and edit status in a table. On a narrow screen the table keeps title, status, and actions                   | `src/app/features/tasks/`     |
+| Calendar  | Browse an agenda grouped by due date, with an Overdue bucket and a “Show completed” toggle                              | `src/app/features/calendar/`  |
+| Analytics | Read status, priority, and workload charts, plus the activity feed                                                      | `src/app/features/analytics/` |
+| Team      | See each person’s open, done, and overdue counts, then open their tasks                                                 | `src/app/features/team/`      |
+| Settings  | See the current profile, choose English or German, and refresh cached data                                              | `src/app/features/settings/`  |
+| Shell     | Search, switch language, open the overdue agenda, create a task, and navigate. Below 960px the sidebar becomes a drawer | `src/app/layout/`             |
 
 Task fields are title, description, status (`todo`, `in_progress`, `done`), priority (`high`, `medium`, `low`), due date, assignee, and tags. Search matches title, description, and tags. Filters cover status, priority, and assignee. Filters are shared: the dashboard, the task table, and the header search all write the same `TaskStore` filter signal, so a search started in the header is already applied when the dashboard or task list is open.
 
@@ -88,6 +89,7 @@ core/api          TaskApiService (writes only)
 core/http         cache, errors, retry, Firebase adapter
 core/utils        pure filters, ordering, dates
 core/services     notifications, data refresh
+core/i18n         English and German dictionaries, language choice
 shared/ui         presentational cards, filters, charts
 shared/forms      validators and error display
 shared/task-dialogs   create / edit / confirm
@@ -151,6 +153,14 @@ The task dialog is a typed reactive form (`src/app/shared/task-dialogs/task-form
 - Submit is blocked while a save is in flight. A rejected save stays in the dialog. Closing a dirty form asks for confirmation.
 - `MatDialog` and the dialog components are imported on first open, so they stay out of the initial bundle (`TaskActionsService`).
 
+### Languages
+
+The UI is translated with [ngx-translate](https://github.com/ngx-translate/core). English is the default. German is the second language. The dictionaries live in `src/app/core/i18n/translations/` and are bundled, so a language change does not call the API and is not affected by the HTTP interceptors.
+
+`LanguageService` remembers the choice in a cookie (`tm.language`), sets `lang` on the document, and updates the browser title and description. The header has an EN/DE control. Settings has the same choice with the language names. Dates use `en-US` or `de` (`DatePipe` and the Material date adapter). The paginator and the datepicker use translated Material labels.
+
+Status, priority, due dates, relative times, validation, snackbars, and the known API error messages are translated. Task titles, descriptions, tags, and people’s names stay in the language they were saved in. An activity detail such as `To Do → In Progress` is translated when it is one of those status names.
+
 ### Performance and accessibility
 
 - Standalone components, lazy `loadComponent` routes, `PreloadAllModules`.
@@ -173,6 +183,7 @@ Husky runs ESLint and Prettier on commit. Commitlint requires [Conventional Comm
 - The HTTP cache is in memory for the tab. A refresh starts cold. Settings is the explicit “drop the cache and reload” control.
 - Fractional `order` can theoretically exhaust precision after many drops between the same pair. The step of 1000 makes that unlikely for this dataset.
 - Activity history is capped at 20 entries (`ACTIVITY_FEED_LIMIT`).
+- Saved task text (titles, descriptions, tags) and people’s names are not translated.
 
 ## Design patterns
 
