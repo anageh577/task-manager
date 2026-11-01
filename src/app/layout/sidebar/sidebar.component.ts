@@ -1,27 +1,28 @@
 import { ChangeDetectionStrategy, Component, output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 
 export interface NavItem {
   path: string;
-  label: string;
+  labelKey: string;
   icon: string;
 }
 
 export const NAV_ITEMS: readonly NavItem[] = [
-  { path: '/dashboard', label: 'Dashboard', icon: '🏠' },
-  { path: '/tasks', label: 'Tasks', icon: '✅' },
-  { path: '/calendar', label: 'Calendar', icon: '📅' },
-  { path: '/analytics', label: 'Analytics', icon: '📈' },
-  { path: '/team', label: 'Team', icon: '👥' },
-  { path: '/settings', label: 'Settings', icon: '⚙️' },
+  { path: '/dashboard', labelKey: 'nav.dashboard', icon: '🏠' },
+  { path: '/tasks', labelKey: 'nav.tasks', icon: '✅' },
+  { path: '/calendar', labelKey: 'nav.calendar', icon: '📅' },
+  { path: '/analytics', labelKey: 'nav.analytics', icon: '📈' },
+  { path: '/team', labelKey: 'nav.team', icon: '👥' },
+  { path: '/settings', labelKey: 'nav.settings', icon: '⚙️' },
 ];
 
 @Component({
   selector: 'app-sidebar',
-  imports: [MatButtonModule, RouterLink, RouterLinkActive],
+  imports: [MatButtonModule, RouterLink, RouterLinkActive, TranslatePipe],
   template: `
-    <nav id="app-navigation" aria-label="Main navigation">
+    <nav id="app-navigation" [attr.aria-label]="'nav.label' | translate">
       <ul>
         @for (item of items; track item.path) {
           <li>
@@ -32,14 +33,14 @@ export const NAV_ITEMS: readonly NavItem[] = [
               (click)="navigate.emit()"
             >
               <span class="icon" aria-hidden="true">{{ item.icon }}</span>
-              {{ item.label }}
+              {{ item.labelKey | translate }}
             </a>
           </li>
         }
       </ul>
     </nav>
     <button mat-flat-button type="button" class="new-task" (click)="newTask.emit()">
-      + New Task
+      + {{ 'action.newTask' | translate }}
     </button>
   `,
   styleUrl: './sidebar.component.scss',

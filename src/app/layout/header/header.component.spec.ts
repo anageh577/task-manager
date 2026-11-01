@@ -1,6 +1,7 @@
 import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+import { LanguageService } from '../../core/i18n/language.service';
 import { JOHN, provideTestEnvironment } from '../../testing/fixtures';
 import { HeaderComponent } from './header.component';
 
@@ -48,6 +49,13 @@ describe('HeaderComponent', () => {
     element.querySelector<HTMLButtonElement>('.menu')!.click();
     element.querySelector<HTMLButtonElement>('.bell')!.click();
     expect([toggles, overdue]).toEqual([1, 1]);
+  });
+
+  it('translates the search field when German is selected', async () => {
+    TestBed.inject(LanguageService).use('de');
+    await fixture.whenStable();
+    expect(element.querySelector('input')?.getAttribute('placeholder')).toBe('Aufgaben suchen...');
+    expect(document.documentElement.lang).toBe('de');
   });
 
   it('shows the profile menu', async () => {

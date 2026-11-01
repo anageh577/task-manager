@@ -3,7 +3,9 @@
   top: 0;
   z-index: 10;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 420px) minmax(0, 1fr);
+  // Side tracks stay at least as wide as their controls, so the 420px search
+  // shrinks instead of sliding underneath them.
+  grid-template-columns: minmax(max-content, 1fr) minmax(0, 420px) minmax(max-content, 1fr);
   align-items: center;
   gap: 16px;
   height: var(--tm-header-height);
@@ -13,8 +15,27 @@
 
   @media (max-width: 599.98px) {
     grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-areas:
+      'start . end'
+      'search search search';
+    height: auto;
     gap: 8px;
-    padding: 0 12px;
+    padding: 8px 12px 12px;
+
+    .start {
+      grid-area: start;
+    }
+
+    .end {
+      grid-area: end;
+    }
+
+    .search {
+      grid-area: search;
+      width: 100%;
+      max-width: 420px;
+      justify-self: center;
+    }
   }
 }
 
@@ -66,9 +87,11 @@
 
 .search {
   position: relative;
+  min-width: 0;
 
   input {
     width: 100%;
+    min-width: 0;
     height: 36px;
     padding: 0 12px 0 34px;
     font: inherit;
@@ -101,6 +124,31 @@
 .bell,
 .menu {
   font-size: 18px;
+}
+
+.languages {
+  display: inline-flex;
+  flex: none;
+  overflow: hidden;
+  border: 1px solid var(--tm-border);
+  border-radius: var(--tm-radius-sm);
+
+  button {
+    height: 32px;
+    padding: 0 8px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--tm-text-muted);
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+
+    &.active {
+      color: var(--tm-primary);
+      background: var(--tm-primary-soft);
+    }
+  }
 }
 
 .profile {

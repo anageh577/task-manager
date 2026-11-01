@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { NOW } from '@core/config/app-config';
+import { LanguageService } from '@core/i18n/language.service';
 import type { TaskFilters, TaskStatus } from '@core/models';
 import { ALL } from '@core/models';
 import { StatisticsStore } from '@core/state/statistics.store';
@@ -11,12 +12,19 @@ import { StatCardComponent } from '@shared/ui/stat-card/stat-card.component';
 import type { TaskStatusChange } from '@shared/ui/task-card/task-card.component';
 import { TaskFilterBarComponent } from '@shared/ui/task-filter-bar/task-filter-bar.component';
 import type { TaskMove } from './task-board/task-board.component';
+import { TranslatePipe } from '@ngx-translate/core';
 import { TaskBoardComponent } from './task-board/task-board.component';
 
 /** Dashboard container: statistics, filters and the Kanban board. */
 @Component({
   selector: 'app-dashboard-page',
-  imports: [ErrorStateComponent, StatCardComponent, TaskBoardComponent, TaskFilterBarComponent],
+  imports: [
+    ErrorStateComponent,
+    StatCardComponent,
+    TaskBoardComponent,
+    TaskFilterBarComponent,
+    TranslatePipe,
+  ],
   templateUrl: './dashboard.page.html',
   styles: `
     .stats {
@@ -39,6 +47,7 @@ export default class DashboardPage {
   protected readonly statistics = inject(StatisticsStore);
   protected readonly users = inject(UserStore);
   protected readonly actions = inject(TaskActionsService);
+  private readonly language = inject(LanguageService);
   protected readonly today = inject(NOW);
 
   constructor() {
@@ -55,7 +64,7 @@ export default class DashboardPage {
   );
   protected readonly resultsAnnouncement = computed(() =>
     this.tasks.hasActiveFilters()
-      ? `${this.tasks.filteredTasks().length} tasks match the filters`
+      ? this.language.text('tasks.match', { count: this.tasks.filteredTasks().length })
       : '',
   );
 

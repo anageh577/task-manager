@@ -4,7 +4,7 @@
       mat-icon-button
       type="button"
       class="menu"
-      aria-label="Toggle navigation"
+      [attr.aria-label]="'header.toggleNav' | translate"
       [attr.aria-expanded]="navOpen()"
       aria-controls="app-navigation"
       (click)="menuToggle.emit()"
@@ -12,21 +12,25 @@
       <span aria-hidden="true">☰</span>
     </button>
   }
-  <a routerLink="/dashboard" class="brand" aria-label="Task Manager home">
+  <a
+    routerLink="/dashboard"
+    class="brand"
+    [attr.aria-label]="'header.home' | translate: { name: ('app.name' | translate) }"
+  >
     <span class="logo">
-      <img src="assets/header-logo.svg" alt="Task Manager" />
+      <img src="assets/header-logo.svg" [attr.alt]="'app.name' | translate" />
     </span>
-    <span class="brand-name">Task Manager</span>
+    <span class="brand-name">{{ 'app.name' | translate }}</span>
   </a>
 </div>
 
 <div class="search" role="search">
-  <label class="visually-hidden" for="global-search">Search tasks</label>
+  <label class="visually-hidden" for="global-search">{{ 'header.searchLabel' | translate }}</label>
   <span class="search-icon" aria-hidden="true">🔍</span>
   <input
     id="global-search"
     type="search"
-    placeholder="Search tasks..."
+    [placeholder]="'header.searchPlaceholder' | translate"
     autocomplete="off"
     [value]="search()"
     (input)="onSearch($event)"
@@ -34,6 +38,29 @@
 </div>
 
 <div class="end">
+  <div class="languages" role="group" [attr.aria-label]="'language.label' | translate">
+    <button
+      type="button"
+      lang="en"
+      [class.active]="language.current() === 'en'"
+      [attr.aria-pressed]="language.current() === 'en'"
+      [attr.title]="'language.english' | translate"
+      (click)="language.use('en')"
+    >
+      EN
+    </button>
+    <button
+      type="button"
+      lang="de"
+      [class.active]="language.current() === 'de'"
+      [attr.aria-pressed]="language.current() === 'de'"
+      [attr.title]="'language.german' | translate"
+      (click)="language.use('de')"
+    >
+      DE
+    </button>
+  </div>
+
   <button
     mat-icon-button
     type="button"
@@ -41,8 +68,8 @@
     [matBadge]="overdueCount() || null"
     matBadgeColor="warn"
     matBadgeSize="small"
-    [title]="overdueCount() + ' overdue tasks'"
-    [attr.aria-label]="'Notifications: ' + overdueCount() + ' overdue tasks'"
+    [title]="'header.notifications' | translate: { count: overdueCount() }"
+    [attr.aria-label]="'header.notifications' | translate: { count: overdueCount() }"
     (click)="showOverdue.emit()"
   >
     <span aria-hidden="true">🔔</span>
@@ -52,7 +79,7 @@
     type="button"
     class="profile"
     [matMenuTriggerFor]="profileMenu"
-    [attr.aria-label]="user().avatar + ', account menu for ' + user().name"
+    [attr.aria-label]="'header.account' | translate: { avatar: user().avatar, name: user().name }"
   >
     <app-avatar [name]="user().name" [initials]="user().avatar" [size]="32" />
   </button>
@@ -61,6 +88,6 @@
       <strong>{{ user().name }}</strong>
       <span>{{ user().email }}</span>
     </div>
-    <a mat-menu-item routerLink="/settings">Settings</a>
+    <a mat-menu-item routerLink="/settings">{{ 'header.settings' | translate }}</a>
   </mat-menu>
 </div>

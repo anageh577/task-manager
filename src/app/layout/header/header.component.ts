@@ -1,18 +1,28 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { RouterLink } from '@angular/router';
+import { LanguageService } from '@core/i18n/language.service';
 import { AvatarComponent } from '@shared/ui/avatar/avatar.component';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-header',
-  imports: [MatBadgeModule, MatButtonModule, MatMenuModule, RouterLink, AvatarComponent],
+  imports: [
+    MatBadgeModule,
+    MatButtonModule,
+    MatMenuModule,
+    RouterLink,
+    AvatarComponent,
+    TranslatePipe,
+  ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent {
+  protected readonly language = inject(LanguageService);
   readonly search = input('');
   readonly overdueCount = input(0);
   readonly user = input<{ name: string; avatar: string; email: string }>({

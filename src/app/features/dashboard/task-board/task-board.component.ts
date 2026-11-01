@@ -3,7 +3,8 @@ import { CdkDrag, CdkDragPlaceholder, CdkDropList, CdkDropListGroup } from '@ang
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import type { Task, TaskStatus } from '@core/models';
-import { STATUS_LABELS, TASK_STATUSES } from '@core/models';
+import { TASK_STATUSES } from '@core/models';
+import { TranslatePipe } from '@ngx-translate/core';
 import { EmptyStateComponent } from '@shared/ui/empty-state/empty-state.component';
 import { SkeletonComponent } from '@shared/ui/skeleton/skeleton.component';
 import type { TaskStatusChange } from '@shared/ui/task-card/task-card.component';
@@ -30,6 +31,7 @@ export interface TaskMove {
     EmptyStateComponent,
     SkeletonComponent,
     TaskCardComponent,
+    TranslatePipe,
   ],
   templateUrl: './task-board.component.html',
   styleUrl: './task-board.component.scss',
@@ -53,7 +55,6 @@ export class TaskBoardComponent {
     const only = this.statusFilter();
     return TASK_STATUSES.filter((status) => !only || status === only).map((status) => ({
       status,
-      label: STATUS_LABELS[status],
       tasks: this.columns()[status],
     }));
   });

@@ -10,6 +10,7 @@ import { UserStore } from '@core/state/user.store';
 import { isOverdue } from '@core/utils/date.utils';
 import { countByStatus } from '@core/utils/task.utils';
 import { AvatarComponent } from '@shared/ui/avatar/avatar.component';
+import { TranslatePipe } from '@ngx-translate/core';
 import { EmptyStateComponent } from '@shared/ui/empty-state/empty-state.component';
 import { ErrorStateComponent } from '@shared/ui/error-state/error-state.component';
 import { SkeletonComponent } from '@shared/ui/skeleton/skeleton.component';
@@ -34,6 +35,7 @@ export interface TeamMemberSummary {
     EmptyStateComponent,
     ErrorStateComponent,
     SkeletonComponent,
+    TranslatePipe,
   ],
   templateUrl: './team.page.html',
   styleUrl: './team.page.scss',

@@ -1,14 +1,19 @@
 <div class="tm-page">
   <header class="tm-page-header">
     <div>
-      <h1>Team</h1>
-      <p>{{ members().length }} members</p>
+      <h1>{{ 'team.title' | translate }}</h1>
+      <p>
+        {{
+          (members().length === 1 ? 'team.membersOne' : 'team.membersOther')
+            | translate: { count: members().length }
+        }}
+      </p>
     </div>
   </header>
 
   @if (users.error() && !members().length) {
     <app-error-state
-      title="Team could not be loaded"
+      title="error.teamLoad"
       [message]="users.error() ?? ''"
       [retrying]="users.isLoading()"
       (retry)="users.reload()"
@@ -20,7 +25,7 @@
       }
     </div>
   } @else {
-    <ul class="grid" aria-label="Team members">
+    <ul class="grid" [attr.aria-label]="'team.list' | translate">
       @for (member of members(); track member.user.id) {
         <li class="tm-panel member" animate.enter="tm-enter">
           <div class="identity">
@@ -32,19 +37,19 @@
           </div>
           <dl class="counts">
             <div>
-              <dt>To Do</dt>
+              <dt>{{ 'status.todo' | translate }}</dt>
               <dd>{{ member.todo }}</dd>
             </div>
             <div>
-              <dt>In Progress</dt>
+              <dt>{{ 'status.in_progress' | translate }}</dt>
               <dd>{{ member.inProgress }}</dd>
             </div>
             <div>
-              <dt>Done</dt>
+              <dt>{{ 'status.done' | translate }}</dt>
               <dd>{{ member.done }}</dd>
             </div>
             <div [class.alert]="member.overdue > 0">
-              <dt>Overdue</dt>
+              <dt>{{ 'stats.overdue' | translate }}</dt>
               <dd>{{ member.overdue }}</dd>
             </div>
           </dl>
@@ -52,16 +57,16 @@
             <mat-progress-bar
               mode="determinate"
               [value]="member.completion"
-              [attr.aria-label]="member.user.name + ' completion'"
+              [attr.aria-label]="'team.completionOf' | translate: { name: member.user.name }"
             />
-            <span>{{ member.completion }}% complete</span>
+            <span>{{ 'team.complete' | translate: { percent: member.completion } }}</span>
           </div>
           <button mat-stroked-button type="button" (click)="viewTasks(member.user)">
-            View tasks
+            {{ 'action.viewTasks' | translate }}
           </button>
         </li>
       } @empty {
-        <app-empty-state icon="👥" title="No team members yet" />
+        <app-empty-state icon="👥" title="team.empty" />
       }
     </ul>
   }

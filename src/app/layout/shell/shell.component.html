@@ -1,4 +1,6 @@
-<button type="button" class="skip-link" (click)="main.focus()">Skip to main content</button>
+<button type="button" class="skip-link" (click)="main.focus()">
+  {{ 'shell.skip' | translate }}
+</button>
 
 <app-header
   [search]="store.filters().search"
@@ -17,7 +19,7 @@
     [mode]="isHandset() ? 'over' : 'side'"
     [opened]="!isHandset() || navOpen()"
     [fixedInViewport]="isHandset()"
-    [fixedTopGap]="64"
+    [fixedTopGap]="headerOffset()"
     (closedStart)="navOpen.set(false)"
   >
     <app-sidebar (newTask)="newTask()" (navigate)="closeNavOnHandset()" />

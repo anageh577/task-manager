@@ -1,10 +1,10 @@
 <div class="tm-page">
   <header class="tm-page-header">
-    <h1>Settings</h1>
+    <h1>{{ 'settings.title' | translate }}</h1>
   </header>
 
   <section class="tm-panel card" aria-labelledby="profile-title">
-    <h2 id="profile-title">Profile</h2>
+    <h2 id="profile-title">{{ 'settings.profile' | translate }}</h2>
     <div class="profile">
       <app-avatar [name]="user.name" [initials]="user.avatar" [size]="48" />
       <div>
@@ -14,14 +14,30 @@
     </div>
   </section>
 
+  <section class="tm-panel card" aria-labelledby="language-title">
+    <h2 id="language-title">{{ 'settings.language' | translate }}</h2>
+    <p class="muted">{{ 'settings.languageHelp' | translate }}</p>
+    <mat-button-toggle-group
+      [value]="language.current()"
+      [attr.aria-label]="'language.label' | translate"
+      (change)="setLanguage($event.value)"
+    >
+      <mat-button-toggle value="en" lang="en">{{
+        'language.english' | translate
+      }}</mat-button-toggle>
+      <mat-button-toggle value="de" lang="de">{{
+        'language.german' | translate
+      }}</mat-button-toggle>
+    </mat-button-toggle-group>
+  </section>
+
   <section class="tm-panel card" aria-labelledby="data-title">
-    <h2 id="data-title">Data</h2>
-    <p class="muted">
-      API responses are cached for a short time to keep navigation instant. Refresh to fetch the
-      latest data from the server.
-    </p>
+    <h2 id="data-title">{{ 'settings.data' | translate }}</h2>
+    <p class="muted">{{ 'settings.dataHelp' | translate }}</p>
     <div>
-      <button mat-stroked-button type="button" (click)="refresh()">Refresh data</button>
+      <button mat-stroked-button type="button" class="refresh" (click)="refresh()">
+        {{ 'action.refresh' | translate }}
+      </button>
     </div>
   </section>
 </div>

@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { NOW } from '@core/config/app-config';
-import { PRIORITY_LABELS, STATUS_LABELS, TASK_PRIORITIES, TASK_STATUSES } from '@core/models';
+import { LanguageService } from '@core/i18n/language.service';
+import { TASK_PRIORITIES, TASK_STATUSES } from '@core/models';
 import { ActivityStore } from '@core/state/activity.store';
 import { TaskStore } from '@core/state/task.store';
 import { UserStore } from '@core/state/user.store';
@@ -8,6 +9,7 @@ import { ActivityFeedComponent } from '@shared/ui/activity-feed/activity-feed.co
 import { ChartComponent } from '@shared/ui/chart/chart.component';
 import { ErrorStateComponent } from '@shared/ui/error-state/error-state.component';
 import { SkeletonComponent } from '@shared/ui/skeleton/skeleton.component';
+import { TranslatePipe } from '@ngx-translate/core';
 
 const STATUS_COLORS = ['#1976D2', '#FF6F00', '#388E3C'];
 const PRIORITY_COLORS = ['#D32F2F', '#F57C00', '#388E3C'];
@@ -15,7 +17,13 @@ const PRIORITY_COLORS = ['#D32F2F', '#F57C00', '#388E3C'];
 /** Task analytics: distribution charts, workload and the recent activity feed. */
 @Component({
   selector: 'app-analytics-page',
-  imports: [ActivityFeedComponent, ChartComponent, ErrorStateComponent, SkeletonComponent],
+  imports: [
+    ActivityFeedComponent,
+    ChartComponent,
+    ErrorStateComponent,
+    SkeletonComponent,
+    TranslatePipe,
+  ],
   templateUrl: './analytics.page.html',
   styleUrl: './analytics.page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -25,15 +33,16 @@ export default class AnalyticsPage {
   protected readonly activity = inject(ActivityStore);
   private readonly users = inject(UserStore);
   protected readonly now = inject(NOW);
+  private readonly language = inject(LanguageService);
 
   protected readonly statusChart = computed(() => ({
-    labels: TASK_STATUSES.map((s) => STATUS_LABELS[s]),
+    labels: TASK_STATUSES.map((status) => this.language.text(`status.${status}`)),
     values: TASK_STATUSES.map((s) => this.tasks.statusCounts()[s]),
     colors: STATUS_COLORS,
   }));
 
   protected readonly priorityChart = computed(() => ({
-    labels: TASK_PRIORITIES.map((p) => PRIORITY_LABELS[p]),
+    labels: TASK_PRIORITIES.map((priority) => this.language.text(`priority.${priority}`)),
     values: TASK_PRIORITIES.map((p) => this.tasks.priorityCounts()[p]),
     colors: PRIORITY_COLORS,
   }));

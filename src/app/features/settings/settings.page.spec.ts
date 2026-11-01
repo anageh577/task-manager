@@ -35,7 +35,7 @@ describe('SettingsPage', () => {
     const cache = TestBed.inject(HttpCacheService);
     cache.set('/api/tasks', new HttpResponse({ body: [] }), 1000);
 
-    element.querySelector<HTMLButtonElement>('button')!.click();
+    element.querySelector<HTMLButtonElement>('.refresh')!.click();
     TestBed.tick();
 
     expect(cache.size).toBe(0);
@@ -48,7 +48,7 @@ describe('SettingsPage', () => {
     await flushBackend();
     await fixture.whenStable();
 
-    element.querySelector<HTMLButtonElement>('button')!.click();
+    element.querySelector<HTMLButtonElement>('.refresh')!.click();
     TestBed.tick();
 
     const urls = TestBed.inject(HttpTestingController)

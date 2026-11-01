@@ -2,6 +2,7 @@ import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { NOW } from '@core/config/app-config';
+import { LanguageService } from '@core/i18n/language.service';
 import type { Task } from '@core/models';
 import { TaskStore } from '@core/state/task.store';
 import { isOverdue, parseIsoDate } from '@core/utils/date.utils';
@@ -10,6 +11,7 @@ import { EmptyStateComponent } from '@shared/ui/empty-state/empty-state.componen
 import { SkeletonComponent } from '@shared/ui/skeleton/skeleton.component';
 import type { TaskStatusChange } from '@shared/ui/task-card/task-card.component';
 import { TaskCardComponent } from '@shared/ui/task-card/task-card.component';
+import { TranslatePipe } from '@ngx-translate/core';
 
 export interface AgendaGroup {
   key: string;
@@ -53,16 +55,17 @@ export function buildAgenda(
     EmptyStateComponent,
     SkeletonComponent,
     TaskCardComponent,
+    TranslatePipe,
   ],
   template: `
     <div class="tm-page">
       <header class="tm-page-header">
         <div>
-          <h1>Calendar</h1>
-          <p>Upcoming work grouped by due date.</p>
+          <h1>{{ 'calendar.title' | translate }}</h1>
+          <p>{{ 'calendar.subtitle' | translate }}</p>
         </div>
         <mat-slide-toggle [checked]="includeDone()" (change)="includeDone.set($event.checked)">
-          Show completed
+          {{ 'action.showCompleted' | translate }}
         </mat-slide-toggle>
       </header>
 
@@ -77,9 +80,9 @@ export function buildAgenda(
           >
             <h2 [id]="'group-' + group.key">
               @if (group.date) {
-                {{ group.date | date: 'EEEE, MMM d' }}
+                {{ group.date | date: 'EEEE, MMM d' : undefined : language.dateLocale() }}
               } @else {
-                ⚠️ {{ group.title }}
+                ⚠️ {{ 'calendar.overdue' | translate }}
               }
               <span class="count">{{ group.tasks.length }}</span>
             </h2>
@@ -96,11 +99,7 @@ export function buildAgenda(
             </div>
           </section>
         } @empty {
-          <app-empty-state
-            icon="🎉"
-            title="Nothing scheduled"
-            message="There are no upcoming tasks."
-          />
+          <app-empty-state icon="🎉" title="calendar.emptyTitle" message="calendar.emptyMessage" />
         }
       }
     </div>
@@ -136,6 +135,7 @@ export default class CalendarPage {
   protected readonly tasks = inject(TaskStore);
   protected readonly actions = inject(TaskActionsService);
   protected readonly today = inject(NOW);
+  protected readonly language = inject(LanguageService);
   protected readonly includeDone = signal(false);
 
   protected readonly agenda = computed(() =>

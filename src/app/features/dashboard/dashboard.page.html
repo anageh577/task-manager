@@ -1,7 +1,7 @@
 <div class="tm-page">
-  <h1 class="visually-hidden">Dashboard</h1>
+  <h1 class="visually-hidden">{{ 'dashboard.title' | translate }}</h1>
 
-  <section class="stats" aria-label="Task statistics">
+  <section class="stats" [attr.aria-label]="'dashboard.stats' | translate">
     @for (stat of statistics.cards(); track stat.id) {
       <app-stat-card [stat]="stat" [loading]="statistics.isLoading()" />
     }
@@ -18,7 +18,7 @@
 
   @if (loadError(); as error) {
     <app-error-state
-      title="Tasks could not be loaded"
+      title="error.tasksLoad"
       [message]="error"
       [retrying]="tasks.isLoading()"
       (retry)="tasks.reload()"

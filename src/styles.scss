@@ -31,6 +31,11 @@
   --tm-shadow-lg: 0 8px 24px rgb(16 24 40 / 12%);
 
   --tm-header-height: 64px;
+
+  @media (max-width: 599.98px) {
+    // Menu row, wrapped search field, and the header border.
+    --tm-header-height: 105px;
+  }
   --tm-sidebar-width: 220px;
   --tm-transition: 160ms cubic-bezier(0.2, 0, 0, 1);
 

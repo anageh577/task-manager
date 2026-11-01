@@ -1,18 +1,22 @@
-<p class="visually-hidden">
-  Reorder tasks by dragging them. Keyboard users can open a card's actions menu and choose Move to.
-</p>
+<p class="visually-hidden">{{ 'board.hint' | translate }}</p>
 <div class="board" cdkDropListGroup [class.single]="visibleColumns().length === 1">
   @for (column of visibleColumns(); track column.status) {
     <section class="column tm-panel" [attr.aria-labelledby]="'column-' + column.status">
       <header class="column-header">
-        <h2 [id]="'column-' + column.status">{{ column.label }}</h2>
-        <span class="count" [attr.aria-label]="column.tasks.length + ' tasks'">
+        <h2 [id]="'column-' + column.status">{{ 'status.' + column.status | translate }}</h2>
+        <span
+          class="count"
+          [attr.aria-label]="
+            (column.tasks.length === 1 ? 'tasks.countOne' : 'tasks.countOther')
+              | translate: { count: column.tasks.length }
+          "
+        >
           {{ loading() ? '–' : column.tasks.length }}
         </span>
       </header>
 
       @if (loading()) {
-        <div class="list" aria-busy="true" aria-label="Loading tasks">
+        <div class="list" aria-busy="true" [attr.aria-label]="'board.loading' | translate">
           @for (i of skeletonCards; track i) {
             <div class="skeleton-card">
               <app-skeleton width="44px" height="16px" />
@@ -50,11 +54,11 @@
             <app-empty-state
               class="empty"
               icon="📭"
-              title="No tasks here"
-              message="Drag a task here or create a new one."
+              title="board.emptyTitle"
+              message="board.emptyMessage"
             >
               <button mat-button type="button" (click)="addTask.emit(column.status)">
-                + Add task
+                + {{ 'action.addTask' | translate }}
               </button>
             </app-empty-state>
           }
