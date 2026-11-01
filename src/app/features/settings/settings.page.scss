@@ -25,3 +25,35 @@ h2 {
   font-size: 13px;
   color: var(--tm-text-muted);
 }
+
+.language-toggle {
+  align-self: flex-start;
+  width: fit-content;
+  max-width: 100%;
+  --mat-button-toggle-shape: var(--tm-radius);
+  --mat-button-toggle-divider-color: var(--tm-border);
+  --mat-button-toggle-text-color: var(--tm-text-subtle);
+  --mat-button-toggle-selected-state-background-color: var(--tm-primary-soft);
+  --mat-button-toggle-selected-state-text-color: var(--tm-primary);
+  --mat-button-toggle-state-layer-color: var(--tm-primary);
+
+  mat-button-toggle {
+    width: 9.75rem;
+  }
+}
+
+.option {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.flag {
+  width: 18px;
+  height: 12px;
+  flex: none;
+  overflow: hidden;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px rgb(16 24 40 / 16%);
+}

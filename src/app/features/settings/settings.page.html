@@ -18,16 +18,24 @@
     <h2 id="language-title">{{ 'settings.language' | translate }}</h2>
     <p class="muted">{{ 'settings.languageHelp' | translate }}</p>
     <mat-button-toggle-group
+      class="language-toggle"
+      hideSingleSelectionIndicator
       [value]="language.current()"
       [attr.aria-label]="'language.label' | translate"
       (change)="setLanguage($event.value)"
     >
-      <mat-button-toggle value="en" lang="en">{{
-        'language.english' | translate
-      }}</mat-button-toggle>
-      <mat-button-toggle value="de" lang="de">{{
-        'language.german' | translate
-      }}</mat-button-toggle>
+      <mat-button-toggle value="en" lang="en">
+        <span class="option">
+          <img class="flag" src="assets/flag-en.svg" alt="" />
+          {{ 'language.english' | translate }}
+        </span>
+      </mat-button-toggle>
+      <mat-button-toggle value="de" lang="de">
+        <span class="option">
+          <img class="flag" src="assets/flag-de.svg" alt="" />
+          {{ 'language.german' | translate }}
+        </span>
+      </mat-button-toggle>
     </mat-button-toggle-group>
   </section>
 
