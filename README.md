@@ -12,6 +12,10 @@ The desktop layout follows the [Figma design](https://www.figma.com/design/inRRw
 
 The rest of this file explains what the product does, why it is built this way, where the design patterns live, and how SOLID shows up in the code.
 
+## Demo
+
+https://github.com/user-attachments/assets/e1204cc3-8f9b-438c-b1a5-c230ea52d0eb
+
 ## Technologies
 
 | Layer         | What it uses                                                           |
